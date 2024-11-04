@@ -1,6 +1,12 @@
-import { addFromApiCommon } from "@stingy/api-common";
-import { subtractFromCommon } from "@stingy/common";
-import chalk from "chalk";
+import { Application } from "$oak";
+import { env } from "../../common/utils/environment.ts"
 
-console.log("[WHATSAPP-WEBHOOK] => Add from PWA => 1 + 2 =", chalk.green(addFromApiCommon(1, 2)));
-console.log("[WHATSAPP-WEBHOOK] => Subtract from COMMON => 4 - 2 =", chalk.green(subtractFromCommon(4, 2)));
+const port = Number(env("WHATSAPP_WEBHOOK_PORT"));
+
+const app = new Application();
+
+app.use((ctx) => {
+  ctx.response.body = "Hello World from whatsapp-webhook!";
+});
+
+await app.listen({ port });

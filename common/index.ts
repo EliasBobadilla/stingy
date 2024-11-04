@@ -5,3 +5,6 @@ export function addFromCommon(a: number, b: number): number {
 export function subtractFromCommon(a: number, b: number): number {
   return a - b;
 }
+
+
+console.log("Hi from Common!")

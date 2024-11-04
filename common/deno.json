@@ -1,5 +1,8 @@
 {
   "name": "@stingy/common",
   "version": "1.0.0",
+  "tasks": {
+    "start": "deno run ./index.ts"
+  },
   "exports": "./index.ts"
 }

@@ -1,5 +1,13 @@
 {
   "name": "@stingy/api-common",
   "version": "1.0.0",
+  "tasks": {
+    "start": "deno run --allow-env --allow-net ./index.ts"
+  },
+  "imports": {
+    "#common/": "../../common/",
+    "#api-common": "../../api-common/",
+    "$oak": "https://deno.land/x/oak@v17.1.3/mod.ts"
+  },
   "exports": "./index.ts"
 }

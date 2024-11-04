@@ -1,11 +1,11 @@
-export function addFromApiCommon(a: number, b: number): number {
-  return a + b;
-}
+import { Application } from "$oak";
+import { env } from "../common/utils/environment.ts"
 
-export function subtractFromApiCommon(a: number, b: number): number {
-  return a - b;
-}
+const port = Number(env("API_COMMON_PORT"));
+const app = new Application();
 
-export function demo(){
-  console.log("Hi from api-common!!!")
-}
+app.use((ctx) => {
+  ctx.response.body = "Hello World from api-common!";
+});
+
+await app.listen({ port });

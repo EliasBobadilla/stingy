@@ -1,6 +1,9 @@
 {
   "name": "@stingy/cli",
   "version": "1.0.0",
+  "tasks": {
+    "start": "deno run --allow-env --allow-net index.ts"
+  },
   "exports": "./index.ts",
   "imports": {
      "chalk": "npm:chalk@5"
