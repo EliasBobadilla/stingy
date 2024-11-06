@@ -2,7 +2,7 @@ import { Application } from "$oak";
 import { env } from "#common/utils/environment.ts";
 import { timing } from "./middlewares/timing.ts";
 import { logger } from "./middlewares/logger.ts";
-import { routes } from "./routes/routes.ts";
+import { userRouter } from "./modules/user/routes.ts";
 
 const port = Number(env("API_COMMON_PORT"));
 
@@ -15,10 +15,7 @@ app.use(logger);
 app.use(timing);
 
 // routes
-routes.forEach((route) => {
-  app.use(route.routes());
-  app.use(route.allowedMethods());
-});
+app.use(userRouter.routes());
 
 app.use((ctx) => {
   ctx.response.body = "Hello World from api-common!";

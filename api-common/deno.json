@@ -2,10 +2,11 @@
   "name": "@stingy/api-common",
   "version": "1.0.0",
   "tasks": {
-    "start": "deno run -A --watch=../common/,src/ ./src/index.ts"
+    "start": "deno run -A --unstable-kv --watch=../common/,src/ ./src/index.ts"
   },
   "imports": {
     "#common/": "../common/",
+    "#db/": "./src/db/",
     "$oak": "https://deno.land/x/oak@v17.1.3/mod.ts"
   },
   "exports": "./src/index.ts"
