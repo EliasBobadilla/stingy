@@ -1,81 +1,43 @@
-# Turborepo starter
+# Stingy
 
-This is an official starter Turborepo.
+<img src="https://w7.pngwing.com/pngs/334/1018/png-transparent-lazytown-character-youtube-prince-stingy-youtube.png" alt="stingy lazytown" width="400"/>
 
-## Using this example
+This project was inspired by [Kodito](https://www.kodito.pe/).
 
-Run the following command:
+The fundamental concept is to provide a free application that anybody can use to quickly track their spending and income via the web app or WhatsApp. The WhatsApp app is expected to provide the majority of inputs, with the web app being used only to read and check the summary or balance.
 
-```sh
-npx create-turbo@latest
-```
+To achieve natural and human integration, we will deploy AI on the WhatsApp app, allowing the end user to write in human language without following particular commands or flows. The AI must interpret a statement like: `papa rellena 10 soles` and register in their account that the user spent **PEN 10 on street food**.
 
-## What's inside?
+The application idea is really simple but allows the team to interact with many technologies and resources, coordinating and requesting many processes between the principal current technologies.
 
-This Turborepo includes the following packages/apps:
+## Technical notes
 
-### Apps and Packages
+This project uses [Turbo](https://turbo.build/repo/docs) to handle the monorepo and contains to main application:
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `Web`: The web client and API to interact with the end users
+- `WhatsApp webhook`: The API interface to interact with Meta and Llama2 or ChatGPT.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+To start the project after cloning it, you need to install the project dependencies from the root, we are using [pnpm]()https://pnpm.io/installation as package manager:
 
 ```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
+pnpm install
 pnpm dev
 ```
 
-### Remote Caching
+To add new dependencies to the project, you must install them from the root project targeting the project to which you wish to add the dependent.
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+`pnpm install express --filter=whatsapp-api`
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+You can get more information about [managin dependecies](https://turbo.build/repo/docs/crafting-your-repository/managing-dependencies)
 
-```
-cd my-turborepo
-npx turbo login
-```
+## Useful links
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+- [NextJs](https://nextjs.org/)
+- [Turbo](https://turbo.build/repo/docs)
+- [⁠⁠Tailwindcss](https://tailwindcss.com/)
+- [DaisyUI](https://daisyui.com/)
+- [E⁠expres](https://expressjs.com/en/5x/api.html)
+- [Whatsapp](https://developers.facebook.com/docs/whatsapp/?locale=es_LA)
+- [Open AI API](https://openai.com/index/openai-api/)
+- [React](https://react.dev/learn)
+- [TypeScript](https://www.typescriptlang.org/)
