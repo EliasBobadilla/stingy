@@ -4,21 +4,6 @@ import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-interface User {
-  email: string;
-  image: string;
-  name: string;
-  role: string;
-}
-
-// export async function loginUser(values: any) {
-//   const data = await fetch("/api/login", {
-//     method: "POST",
-//     body: JSON.stringify(values),
-//   });
-//   return await data.json();
-// }
-
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +11,7 @@ export default function LoginForm() {
   const [success, setSuccess] = useState("");
   const router = useRouter();
 
-  const {user, signIn} = useAuth()
+  const {signIn} = useAuth()
 
 
   // useEffect(() => {
@@ -49,8 +34,8 @@ export default function LoginForm() {
       setEmail("");
       setPassword("");
       router.push("/");
-    } catch (err: any) {
-      setError(err?.data?.error || "Login failed");
+    } catch (err) {
+      setError(err?.toString() || "Login failed");
     }
   };
 

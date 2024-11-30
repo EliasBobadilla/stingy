@@ -6,7 +6,7 @@ export default async function LandingPage() {
     <>
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <h1 className="text-red-800 text-3xl font-bold">
-          Let's play with auth.js and GitHub provider
+          Play with auth.js and GitHub provider
         </h1>
       </div>
     </>
