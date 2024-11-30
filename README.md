@@ -36,7 +36,7 @@ You can get more information about [managin dependecies](https://turbo.build/rep
 - [Turbo](https://turbo.build/repo/docs)
 - [⁠⁠Tailwindcss](https://tailwindcss.com/)
 - [DaisyUI](https://daisyui.com/)
-- [E⁠expres](https://expressjs.com/en/5x/api.html)
+- [E⁠xpress](https://expressjs.com/en/5x/api.html)
 - [Whatsapp](https://developers.facebook.com/docs/whatsapp/?locale=es_LA)
 - [Open AI API](https://openai.com/index/openai-api/)
 - [React](https://react.dev/learn)
