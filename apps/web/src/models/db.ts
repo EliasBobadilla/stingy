@@ -5,7 +5,7 @@ import { assertSome } from "@repo/common/utils/validator";
 
 const region = "us-east-1";
 
-function createDynamoDB() {
+export async function createDynamoDB() {
   const accessKeyId = process.env.AWS_ACCESS_KEY;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   assertSome(accessKeyId)
@@ -19,7 +19,3 @@ function createDynamoDB() {
     },
   })
 }
-
-const client = createDynamoDB()
-
-export default client

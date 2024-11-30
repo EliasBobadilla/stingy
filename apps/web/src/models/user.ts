@@ -1,7 +1,9 @@
 "use server";
 
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import dynamoDBClient from "./db";
+import {createDynamoDB} from "./db";
+
+const client = await createDynamoDB()
 
 const TABLE_NAME = "stingy-users";
 
@@ -40,7 +42,7 @@ export const addUser = async (user: User): Promise<void> => {
     TableName: TABLE_NAME,
     Item: marshall(user),
   };
-  await dynamoDBClient.putItem(params);
+  await client.putItem(params);
 };
 
 export const findUser = async ({
@@ -55,7 +57,7 @@ export const findUser = async ({
     }),
   };
 
-  const data = await dynamoDBClient.getItem(params);
+  const data = await client.getItem(params);
 
   if (data.Item) {
     return unmarshall(data.Item) as User;
