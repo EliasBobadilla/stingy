@@ -22,7 +22,7 @@ async function getSession() {
 
   const authSession = await auth(); // next auth session
 
-  if (!authSession || !authSession.user.email) {
+  if (!authSession || !authSession?.user?.email) {
     return;
   }
 

@@ -3,7 +3,7 @@
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import {createDynamoDB} from "./db";
 
-const client = await createDynamoDB()
+const client = createDynamoDB()
 
 const TABLE_NAME = "stingy-users";
 
