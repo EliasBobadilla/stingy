@@ -4,7 +4,6 @@ import { findUser } from "@/models/user";
 import { createSession, defaultExpiration } from "@/app/lib/session";
 
 export async function POST(req: Request) {
-  //await dbConnect();
   const { email, password } = await req.json();
 
   const user = await findUser({
