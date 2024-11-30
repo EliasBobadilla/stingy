@@ -1,10 +1,8 @@
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { assertSome } from "@repo/common/utils/validator";
 
 const secretKey = process.env.SESSION_SECRET;
-assertSome(secretKey,"process.env.SESSION_SECRET")
 const encodedKey = new TextEncoder().encode(secretKey);
 
 type SessionPayload = {

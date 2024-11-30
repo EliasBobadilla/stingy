@@ -1,13 +1,14 @@
 import { addUser, findUser } from "@/models/user";
+import { assertSome } from "@repo/common/utils/validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { ulid } from "ulid";
 
-const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function POST(req: Request) {
-  //await dbConnect();
+  assertSome(JWT_SECRET, "process.env.JWT_SECRET")
 
   const { name, email, password } = await req.json();
 

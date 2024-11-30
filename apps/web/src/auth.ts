@@ -5,6 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 function createGoogleProvider() { 
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  
   assertSome(clientId,"process.env.GOOGLE_CLIENT_ID")
   assertSome(clientSecret,"process.env.GOOGLE_CLIENT_SECRET")
 
