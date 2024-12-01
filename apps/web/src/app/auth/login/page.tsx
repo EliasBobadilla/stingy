@@ -3,8 +3,10 @@
 import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+//import { useLocalstorageState } from "rooks";
 
 export default function LoginForm() {
+  // const [user] = useLocalstorageState("user");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -12,14 +14,6 @@ export default function LoginForm() {
   const router = useRouter();
 
   const {signIn} = useAuth()
-
-
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem("user");
-  //   if (storedUser) {
-  //     setUser(JSON.parse(storedUser));
-  //   }
-  // }, []);
 
   const isLoading = false;
 
@@ -30,7 +24,6 @@ export default function LoginForm() {
 
     try {
       await signIn({ email, password });
-      // localStorage.setItem("user", JSON.stringify(loggedInUser)); // Persist user in localStorage
       setEmail("");
       setPassword("");
       router.push("/");

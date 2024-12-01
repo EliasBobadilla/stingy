@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { findUser } from "@/models/user";
+import { findUser } from "@repo/common/models/user";
 import { createSession, defaultExpiration } from "@/app/lib/session";
 
 export async function POST(req: Request) {
@@ -39,11 +39,11 @@ export async function POST(req: Request) {
   await createSession(sessionPayload);
 
   // Return user details (without password)
-  // const userWithoutPassword = user.toObject();
-  // delete userWithoutPassword.password;
+  const userWithoutPassword = {...user}
+  delete userWithoutPassword.password;
 
   return NextResponse.json(
-    { message: "Login successful", user },
+    userWithoutPassword,
     { status: 200 }
   );
 }

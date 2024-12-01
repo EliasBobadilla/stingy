@@ -1,4 +1,4 @@
-import { addUser, findUser } from "@/models/user";
+import { addUser, findUser } from "@repo/common/models/user";
 import { assertSome } from "@repo/common/utils/validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";

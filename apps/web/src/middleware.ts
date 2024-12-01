@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { createSession, decrypt } from "./app/lib/session";
 import { auth } from "./auth";
-import { findUser } from "@/models/user";
+import { findUser } from "@repo/common/models/user";
 
 const PROTECTED_ROUTES = ["/dashboard"];
 

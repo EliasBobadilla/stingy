@@ -1,7 +1,6 @@
-"use server";
-
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import {createDynamoDB} from "./db";
+import { User } from "@/types/user";
 
 const client = createDynamoDB()
 
@@ -26,16 +25,6 @@ const MOCKED_USERS = [
     total_play_time: 3600,
   },
 ];
-
-export interface User {
-  id: string;
-  role: string;
-  email: string;
-  password: string;
-  name: string;
-  image: string;
-  //inventory: Record<string, number>;
-}
 
 export const addUser = async (user: User): Promise<void> => {
   const params = {

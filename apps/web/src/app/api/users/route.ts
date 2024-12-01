@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { findUsers } from "@/models/user";
+import { findUsers } from "@repo/common/models/user";
 
 export async function GET() {
   try {

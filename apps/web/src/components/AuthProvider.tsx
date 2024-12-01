@@ -1,8 +1,10 @@
 "use client";
 
-import { User } from "@/models/user";
+import { User } from "@repo/common/types/user";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useLocalStorageState } from "ahooks";
+import { isDefined } from "remeda"
 
 type SignInInput = {
   email: string;
@@ -27,7 +29,7 @@ const signOutFn = async (): Promise<boolean> => {
 
 type Authorization = {
   isLoggedIn: boolean;
-  user: User | null;
+  user?: User | null;
   signIn: (user: SignInInput) => Promise<void>;
   signOut: () => Promise<void>;
 };
@@ -35,7 +37,7 @@ type Authorization = {
 const INITIAL_STATE: Authorization = {
   isLoggedIn: false,
   user: null,
-   
+
   signIn: async () => Promise.resolve(),
   signOut: async () => Promise.resolve(),
 };
@@ -47,16 +49,19 @@ interface Props {
 }
 
 export const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useLocalStorageState<User | null>("user");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
   const router = useRouter();
+
+  useEffect(() => {
+    const logged = isDefined(user) && isDefined(user?.role);
+    setIsLoggedIn(logged);
+  }, [user])
 
   const signIn = async (newUser: SignInInput) => {
     try {
       const response = await signInFn(newUser);
       setUser(response);
-      setIsLoggedIn(true);
     } catch (error) {
       console.log(error);
     }
@@ -66,11 +71,8 @@ export const AuthProvider = ({ children }: Props) => {
     try {
       const response = await signOutFn();
       if (response) {
-        // Clear localStorage
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        // Redirect to the login page
-        router.push("/auth/login");
+        setUser(null)
+        router.replace("/auth/login");
       } else {
         console.error("Failed to sign out");
       }
