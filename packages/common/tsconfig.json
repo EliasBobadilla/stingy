@@ -6,16 +6,9 @@
         "name": "next"
       }
     ],
-    "paths": {
-      "@/*": ["./*"]
-    }
   },
   "include": [
-    "next-env.d.ts",
-    "next.config.js",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
+    "**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

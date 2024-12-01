@@ -1,5 +1,5 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
-import { assertSome } from "@/utils/validator";
+import { assertSome } from "../utils/validator";
 
 const region = "us-east-1";
 

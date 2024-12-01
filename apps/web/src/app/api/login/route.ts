@@ -38,12 +38,13 @@ export async function POST(req: Request) {
   // Create a session
   await createSession(sessionPayload);
 
-  // Return user details (without password)
-  const userWithoutPassword = {...user}
-  delete userWithoutPassword.password;
-
   return NextResponse.json(
-    userWithoutPassword,
+    {
+      role: user.role,
+      email: user.email,
+      name: user.name,
+      image: user.image
+    },
     { status: 200 }
   );
 }
