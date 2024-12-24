@@ -1,8 +1,8 @@
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import {createDynamoDB} from "./db";
+import { createDynamoDB } from "./db";
 import { User } from "../types/user";
 
-const client = createDynamoDB()
+const client = createDynamoDB();
 
 const TABLE_NAME = "stingy-users";
 

@@ -1,77 +1,49 @@
-import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
-import { createSession, decrypt } from "./app/lib/session";
-import { auth } from "./auth";
-import { findUser } from "@repo/common/models/user";
+import { NextRequest } from "next/server";
+import { withAuth } from "next-auth/middleware";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 
-const PROTECTED_ROUTES = ["/dashboard"];
+const publicPages = [
+  "/",
+  "/login",
+  "/register",
+  // (/secret requires auth)
+];
 
-const PUBLIC_ROUTES = ["/login", "/"];
+const intlMiddleware = createMiddleware(routing);
 
-const ROLE_BASED_ROUTES: Record<string, string> = {
-  "/admin": "admin",
-  "/manager": "manager",
-  "/cto": "cto",
+const authMiddleware = withAuth(
+  // Note that this callback is only invoked if
+  // the `authorized` callback has returned `true`
+  // and not for pages listed in `pages`.
+  (req) => intlMiddleware(req),
+  {
+    callbacks: {
+      authorized: ({ token }) => token != null,
+    },
+    pages: {
+      signIn: "/login",
+    },
+  },
+);
+
+export default function middleware(req: NextRequest) {
+  const publicPathnameRegex = RegExp(
+    `^(/(${routing.locales.join("|")}))?(${publicPages
+      .flatMap((p) => (p === "/" ? ["", "/"] : p))
+      .join("|")})/?$`,
+    "i",
+  );
+  const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
+
+  if (isPublicPage) {
+    return intlMiddleware(req);
+  } else {
+    return (authMiddleware as any)(req);
+  }
+}
+
+export const config = {
+  // Skip all paths that should not be internationalized
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 };
-
-async function getSession() {
-  const cookie = (await cookies()).get("session")?.value; // custom session
-  if (cookie) {
-    return await decrypt(cookie);
-  }
-
-  const authSession = await auth(); // next auth session
-
-  if (!authSession || !authSession?.user?.email) {
-    return;
-  }
-
-  const currentUser = await findUser({
-    email: authSession.user.email,
-  });
-
-  if (!currentUser) {
-    return;
-  }
-
-  const { id, name, email, role } = currentUser;
-
-  const sessionPayload = {
-    userId: id,
-    name,
-    email,
-    role,
-    expiresAt: new Date(authSession!.expires),
-  };
-
-  await createSession(sessionPayload);
-
-  return sessionPayload;
-}
-
-export default async function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname;
-  const isProtectedRoute = PROTECTED_ROUTES.includes(path);
-  const isPublicRoute = PUBLIC_ROUTES.includes(path);
-
-  const session = await getSession();
-
-  if (isProtectedRoute && !session?.userId) {
-    return NextResponse.redirect(new URL("/auth/login", req.nextUrl));
-  }
-
-  if (isPublicRoute && session?.userId) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
-  }
-
-  for (const route in ROLE_BASED_ROUTES) {
-    if (path.startsWith(route)) {
-      const requiredRole = ROLE_BASED_ROUTES[route];
-      if (session?.role !== requiredRole) {
-        return NextResponse.redirect(new URL("/unauthorized", req.nextUrl));
-      }
-    }
-  }
-
-  return NextResponse.next();
-}

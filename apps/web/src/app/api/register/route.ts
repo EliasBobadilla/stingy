@@ -1,21 +1,20 @@
 import { addUser, findUser } from "@repo/common/models/user";
-import { assertSome } from "@repo/common/utils/validator";
+import { Config } from "@repo/common/utils/config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { ulid } from "ulid";
 
-const JWT_SECRET = process.env.AUTH_SECRET;
-
 export async function POST(req: Request) {
-  assertSome(JWT_SECRET, "process.env.AUTH_SECRET")
-
   const { name, email, password } = await req.json();
 
   // Check if the user already exists
   const existingUser = await findUser({
     email,
   });
+
+  console.log("@@@@@@@ [existingUser] -->", existingUser);
+
   if (existingUser) {
     return NextResponse.json({ error: "User already exists" }, { status: 409 });
   }
@@ -32,6 +31,7 @@ export async function POST(req: Request) {
     role: "admin",
     image:
       "https://img.freepik.com/premium-vector/user-profile-icon-vector-1_666870-1779.jpg",
+    workspaces: ["demo"],
   };
 
   try {
@@ -40,19 +40,15 @@ export async function POST(req: Request) {
     // Generate JWT
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: "7d" } // Token expiration time
+      Config.jwtSecret,
+      { expiresIn: "30d" }, // Token expiration time
     );
 
     return NextResponse.json(
       { message: "User registered successfully", token, user },
-      { status: 201 }
+      { status: 201 },
     );
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to register user" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error }, { status: 500 });
   }
 }

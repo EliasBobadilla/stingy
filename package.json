@@ -1,14 +1,17 @@
 {
-  "name": "my-turborepo",
+  "name": "stingy-repo",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "db": "cd db && java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb",
+    "start": "concurrently \"npm run db\" \"npm run dev\"",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "prettier": "^3.4.1",
+    "concurrently": "^9.1.0",
+    "prettier": "^3.4.2",
     "turbo": "^2.3.3",
     "typescript": "5.7.2"
   },
