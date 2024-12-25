@@ -13,15 +13,17 @@ To achieve natural and human integration, we will use an AI API provider on the 
 This project uses [Turbo](https://turbo.build/repo/docs) to handle the monorepo and contains to main application:
 
 - `Web`: The web client and API
-- `DynamoDB`: A local instance of AWS Dynamo DB
+- `db`: Your local instance of AWS Dynamo DB
 - `common` : Shared logic and methods across the apps
 - `eslint-config`: Eslint general config
 - `typescript-config` TypeScript general config
 
-To start the project after cloning it, you need to run `pnpm install` to install the project dependencies from the root directory, we are using [pnpm](https://pnpm.io/) as package manager.
+## Configure your local DynamoDB instance
 
-Then you have to configure your local dynamodb instance:
-You need the JRE and the aws cli installed on your device and run the next command to configure your local dynamo db instance:
+- You need the JRE and the AWS cli installed on your device
+- Download the latest version of [DynamoDB](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.zip)
+- Unzip the content of the downloaded file on the `db` folder on this project
+- Run the next command to configure the DynamoDB instance:
 
 ```
 aws configure
@@ -31,7 +33,11 @@ Default region name: stingyFakeRegion
 Default output format: json
 ```
 
-then run:
+- Check this [link](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html) if you need more information about DynamoDB local instances.
+
+## Run the project
+
+we are using [pnpm](https://pnpm.io/) as package manager. To start the project after cloning it and prepare the local DynamoDB instance, you need to run `pnpm install` to install the project dependencies from the root directory, then run:
 
 ```
 pnpm dev
