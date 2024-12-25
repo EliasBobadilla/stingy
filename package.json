@@ -3,9 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
     "db": "cd db && java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb",
-    "start": "concurrently \"npm run db\" \"npm run dev\"",
+    "dev": "concurrently \"npm run db\" \"turbo dev\"",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },

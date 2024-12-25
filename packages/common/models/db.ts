@@ -1,20 +1,16 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
-import { assertSome } from "../utils/validator";
+import { config } from "../utils/config";
 
-const region = "us-east-1";
+// URL for the local DynamoDB service.
+const endpoint = "http://localhost:8000";
 
 export function createDynamoDB() {
-  const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-  const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-
-  assertSome(accessKeyId, "process.env.AWS_ACCESS_KEY_ID");
-  assertSome(secretAccessKey, "process.env.AWS_SECRET_ACCESS_KEY");
-
   return new DynamoDB({
-    region,
+    region: config.awsRegion,
     credentials: {
-      accessKeyId,
-      secretAccessKey,
+      accessKeyId: config.awsAccessKeyId,
+      secretAccessKey: config.awsSecretAccessKey,
     },
+    ...(config.isDev && { endpoint }),
   });
 }

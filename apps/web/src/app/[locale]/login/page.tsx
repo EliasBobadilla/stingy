@@ -18,7 +18,7 @@ export default function Login() {
 
     const formData = new FormData(event.currentTarget);
     signIn("credentials", {
-      username: formData.get("username"),
+      email: formData.get("email"),
       password: formData.get("password"),
       redirect: false,
     }).then((result) => {
@@ -49,7 +49,7 @@ export default function Login() {
           </span>
           <input
             className="input input-bordered w-full max-w-xs"
-            name="username"
+            name="email"
             type="text"
           />
         </label>

@@ -1,7 +1,9 @@
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import { findUser } from "@repo/common/models/user";
+import { findUserByEmail } from "@repo/common/models/user";
+import jwt from "jsonwebtoken";
+import { config } from "@repo/common/utils/config";
 
 const auth: AuthOptions = {
   providers: [
@@ -12,22 +14,34 @@ const auth: AuthOptions = {
         password: { type: "password" },
       },
       async authorize(credentials) {
-        const { email, password } = credentials;
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Check if the user already exists
-        const existingUser = await findUser({
-          email,
-        });
-
-        if (
-          credentials?.username === "admin" &&
-          credentials.password === "admin"
-        ) {
-          return { id: "1", name: "admin" };
+        // early return if no credentials
+        if (!credentials) {
+          return null;
         }
 
-        return null;
+        const user = await findUserByEmail(credentials);
+
+        // early return if no user
+        if (!user) {
+          return null;
+        }
+
+        // Check if the password is correct
+        const isPasswordCorrect = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+
+        const { id, email } = user;
+
+        return isPasswordCorrect
+          ? {
+              id,
+              token: jwt.sign({ id, email }, config.jwtSecret, {
+                expiresIn: "30d",
+              }),
+            }
+          : null;
       },
     }),
   ],

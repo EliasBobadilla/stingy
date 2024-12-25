@@ -34,12 +34,6 @@ Default output format: json
 then run:
 
 ```
-pnpm dynamo
-```
-
-and in a new terminal tab/window:
-
-```
 pnpm dev
 ```
 
