@@ -38,4 +38,4 @@ yarn-error.log*
 *.pem
 
 # DynamoDB
-db
+db/
