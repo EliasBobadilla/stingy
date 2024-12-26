@@ -14,8 +14,8 @@ assertSome(awsRegion, "AWS_REGION");
 const jwtSecret = process.env.AUTH_SECRET;
 assertSome(jwtSecret, "AUTH_SECRET");
 
-const nextAuthSecret = process.env.NEXTAUTH_SECRET;
-assertSome(nextAuthSecret, "NEXTAUTH_SECRET");
+// const nextAuthSecret = process.env.NEXTAUTH_SECRET;
+// assertSome(nextAuthSecret, "NEXTAUTH_SECRET");
 
 const sessionSecret = process.env.SESSION_SECRET;
 assertSome(sessionSecret, "SESSION_SECRET");
@@ -26,7 +26,7 @@ export const config = {
   awsSecretAccessKey,
   awsRegion,
   jwtSecret,
-  nextAuthSecret,
+  //  nextAuthSecret,
   sessionSecret,
 };
 

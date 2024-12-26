@@ -19,7 +19,9 @@ This project uses [Turbo](https://turbo.build/repo/docs) to handle the monorepo 
 - `typescript-config` TypeScript general config
 
 ## Configure environment variables
+
 - Create the file `apps/web/.env` with the following variables:
+
 ```
 NEXTAUTH_SECRET=StingyFakeAuthSecret
 AUTH_SECRET=StingyFakeAuthSecret
@@ -36,7 +38,7 @@ ENVIRONMENT=dev
 - Download the latest version of [DynamoDB](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.zip)
 - Unzip the content of the downloaded file on the `db` folder on this project
 - It has to look like this:
-![image](https://raw.githubusercontent.com/EliasBobadilla/stingy/refs/heads/main/assets/db_Screenshot.png)
+  ![image](https://raw.githubusercontent.com/EliasBobadilla/stingy/refs/heads/main/assets/db_Screenshot.png)
 - Run the next command to configure the DynamoDB instance:
 
 ```
@@ -62,9 +64,6 @@ To add new dependencies to the project, you must install them from the root proj
 `pnpm install express --filter=web`
 
 You can get more information about [managing dependencies](https://turbo.build/repo/docs/crafting-your-repository/managing-dependencies)
-
-
-
 
 ## Useful links
 
