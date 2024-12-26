@@ -4,6 +4,5 @@ export interface User {
   email: string;
   password: string;
   name: string;
-  image: string;
   //inventory: Record<string, number>;
 }

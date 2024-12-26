@@ -1,35 +1,50 @@
-import { assertSome } from "@repo/common/utils/validator";
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import { AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
+import { findUserByEmail } from "@repo/common/models/user";
+import jwt from "jsonwebtoken";
+import { config } from "@repo/common/utils/config";
 
-function createGoogleProvider() { 
-  const clientId = process.env.GOOGLE_CLIENT_ID;
-  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  
-  assertSome(clientId,"process.env.GOOGLE_CLIENT_ID")
-  assertSome(clientSecret,"process.env.GOOGLE_CLIENT_SECRET")
-
-  return GoogleProvider({
-    clientId,
-    clientSecret,
-    authorization: {
-      params: {
-        prompt: "consent",
-        access_type: "offline",
-        response_type: "code",
-      },
-    },
-  })
-}
-
-
-export const { handlers, signIn, signOut, auth } = NextAuth({
+const auth: AuthOptions = {
   providers: [
-    createGoogleProvider(),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { type: "text" },
+        password: { type: "password" },
+      },
+      async authorize(credentials) {
+        // early return if no credentials
+        if (!credentials) {
+          return null;
+        }
+
+        const user = await findUserByEmail(credentials);
+
+        // early return if no user
+        if (!user) {
+          return null;
+        }
+
+        // Check if the password is correct
+        const isPasswordCorrect = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+
+        const { id, email } = user;
+
+        return isPasswordCorrect
+          ? {
+              id,
+              token: jwt.sign({ id, email }, config.jwtSecret, {
+                expiresIn: "30d",
+              }),
+            }
+          : null;
+      },
+    }),
   ],
-  callbacks: {
-    authorized: async ({ auth }) => {
-      return !!auth;
-    },
-  },
-});
+};
+
+export default auth;

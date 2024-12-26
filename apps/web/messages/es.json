@@ -1,0 +1,28 @@
+{
+  "Index": {
+    "title": "Inicio",
+    "loggedIn": "Logueado como {username}",
+    "loggedOut": "Se ha cerrado tu sesion.",
+    "login": "Login",
+    "logout": "Logout",
+    "secret": "Pagina secreta para usuarios registrados"
+  },
+  "LocaleLayout": {
+    "title": "Stingy Inicio"
+  },
+  "Login": {
+    "title": "Login",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "submit": "Login",
+    "error": "{error, select, CredentialsSignin {Invalid username or password} other {Unknown error}}"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Cambiar a {locale, select, es {Español} en {Ingles} other {Unknown}}"
+  },
+  "Secret": {
+    "title": "Pagina secreta",
+    "description": "esta pagina es visible solo para usuarios logueados",
+    "logout": "Cerrar sesion"
+  }
+}

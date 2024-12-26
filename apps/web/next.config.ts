@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import intl from "next-intl/plugin";
+
+const withNextIntl = intl();
 
 const nextConfig: NextConfig = {
   images: {
@@ -7,13 +10,8 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
       },
-      {
-        protocol: "https",
-        hostname: "img.freepik.com",
-      },
     ],
   },
-  transpilePackages: ["next-auth"],
 };
 
-export default nextConfig;
+module.exports = withNextIntl(nextConfig);
