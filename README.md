@@ -18,9 +18,21 @@ This project uses [Turbo](https://turbo.build/repo/docs) to handle the monorepo 
 - `eslint-config`: Eslint general config
 - `typescript-config` TypeScript general config
 
+## Configure environment variables
+- Create the file `apps/web/.env` with the following variables:
+```
+NEXTAUTH_SECRET=StingyFakeAuthSecret
+AUTH_SECRET=StingyFakeAuthSecret
+SESSION_SECRET=StingyFakeSecret
+AWS_ACCESS_KEY_ID=stingyFakeKeyId
+AWS_SECRET_ACCESS_KEY=stingyFakeSecretAccessKey
+AWS_REGION=stingyFakeRegion
+ENVIRONMENT=dev
+```
+
 ## Configure your local DynamoDB instance
 
-- You need the JRE and the AWS cli installed on your device
+- You need the [JRE](https://www.java.com/en/download/) and the [AWS](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) cli tool installed on your device
 - Download the latest version of [DynamoDB](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.zip)
 - Unzip the content of the downloaded file on the `db` folder on this project
 - Run the next command to configure the DynamoDB instance:
@@ -48,6 +60,9 @@ To add new dependencies to the project, you must install them from the root proj
 `pnpm install express --filter=web`
 
 You can get more information about [managing dependencies](https://turbo.build/repo/docs/crafting-your-repository/managing-dependencies)
+
+
+
 
 ## Useful links
 
