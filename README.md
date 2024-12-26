@@ -35,6 +35,8 @@ ENVIRONMENT=dev
 - You need the [JRE](https://www.java.com/en/download/) and the [AWS](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) cli tool installed on your device
 - Download the latest version of [DynamoDB](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.zip)
 - Unzip the content of the downloaded file on the `db` folder on this project
+- It has to look like this:
+![image](https://raw.githubusercontent.com/EliasBobadilla/stingy/refs/heads/main/assets/db_Screenshot.png)
 - Run the next command to configure the DynamoDB instance:
 
 ```
