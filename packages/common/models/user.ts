@@ -22,7 +22,7 @@ const tableSchema = {
   TableName: "stingy-users",
 } as const satisfies CreateTableCommandInput;
 
-const client = await createDynamoDB(tableSchema);
+const client = createDynamoDB(tableSchema);
 
 export const addUser = async (user: User): Promise<void> => {
   await add(client, tableSchema.TableName, user);

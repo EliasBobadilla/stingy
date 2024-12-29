@@ -16,7 +16,7 @@ const endpoint = "http://localhost:8000";
  * @param tableSchema - The table schema must only have the key/keys required for the CRUD processes
  * @returns - DynamoDB client
  */
-export async function createDynamoDB(tableSchema: CreateTableCommandInput) {
+export function createDynamoDB(tableSchema: CreateTableCommandInput) {
   const db = new DynamoDB({
     credentials: {
       accessKeyId: config.awsAccessKeyId,
@@ -26,7 +26,7 @@ export async function createDynamoDB(tableSchema: CreateTableCommandInput) {
     ...(config.isDev && { endpoint }),
   });
 
-  await createTableIfNotExists(db, tableSchema);
+  void createTableIfNotExists(db, tableSchema);
   return db;
 }
 

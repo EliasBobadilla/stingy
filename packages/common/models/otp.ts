@@ -22,7 +22,7 @@ const tableSchema = {
   TableName: "stingy-otp",
 } as const satisfies CreateTableCommandInput;
 
-const client = await createDynamoDB(tableSchema);
+const client = createDynamoDB(tableSchema);
 
 export const addOtp = async (otp: Otp): Promise<void> => {
   await add(client, tableSchema.TableName, otp);
