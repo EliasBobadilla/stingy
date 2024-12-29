@@ -1,38 +1,51 @@
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { createDynamoDB } from "./db";
+import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
 import { User } from "../types/user";
+import { add, createDynamoDB, findOne, update } from "./db";
 
-const client = createDynamoDB();
+const tableSchema = {
+  AttributeDefinitions: [
+    {
+      AttributeName: "email",
+      AttributeType: "S",
+    },
+  ],
+  KeySchema: [
+    {
+      AttributeName: "email",
+      KeyType: "HASH",
+    },
+  ],
+  ProvisionedThroughput: {
+    ReadCapacityUnits: 1,
+    WriteCapacityUnits: 1,
+  },
+  TableName: "stingy-users",
+} as const satisfies CreateTableCommandInput;
 
-const TABLE_NAME = "stingy-users";
+const client = createDynamoDB(tableSchema);
 
 export const addUser = async (user: User): Promise<void> => {
-  const params = {
-    TableName: TABLE_NAME,
-    Item: marshall(user),
-  };
-  await client.putItem(params);
+  await add(client, tableSchema.TableName, user);
 };
 
 export const findUserByEmail = async ({
   email,
 }: {
   email: string;
-}): Promise<User | null> => {
-  const params = {
-    TableName: TABLE_NAME,
-    Key: marshall({
-      email: email,
-    }),
-  };
+}): Promise<User | null> =>
+  findOne<User>(client, tableSchema.TableName, { email });
 
-  const data = await client.getItem(params);
-
-  if (data.Item) {
-    return unmarshall(data.Item) as User;
-  }
-
-  return null;
+export const updateUserByEmail = async (
+  email: string,
+  params: Partial<User>,
+): Promise<void> => {
+  const tempo = await update<User>(
+    client,
+    tableSchema.TableName,
+    { email },
+    params,
+  );
+  console.log("###### UPDATE USER RESPONSE -->", tempo);
 };
 
 export const findUsers = async () => {

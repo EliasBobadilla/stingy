@@ -1,8 +1,8 @@
 "use client";
 
+import PageLayout from "@/components/PageLayout";
 import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import PageLayout from "@/components/PageLayout";
 
 export default function Secret() {
   const t = useTranslations("Secret");

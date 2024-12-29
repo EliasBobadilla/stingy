@@ -1,6 +1,6 @@
 # Stingy
 
-<img src="https://w7.pngwing.com/pngs/334/1018/png-transparent-lazytown-character-youtube-prince-stingy-youtube.png" alt="stingy lazytown" width="400"/>
+<img src="https://w7.pngwing.com/pngs/334/1018/png-transparent-lazytown-character-youtube-prince-stingy-youtube.png" alt="stingy" width="400"/>
 
 This project was inspired by [Kodito](https://www.kodito.pe/).
 
@@ -23,13 +23,10 @@ This project uses [Turbo](https://turbo.build/repo/docs) to handle the monorepo 
 - Create the file `apps/web/.env` with the following variables:
 
 ```
-NEXTAUTH_SECRET=StingyFakeAuthSecret
 AUTH_SECRET=StingyFakeAuthSecret
-SESSION_SECRET=StingyFakeSecret
 AWS_ACCESS_KEY_ID=stingyFakeKeyId
 AWS_SECRET_ACCESS_KEY=stingyFakeSecretAccessKey
 AWS_REGION=stingyFakeRegion
-ENVIRONMENT=dev
 ```
 
 ## Configure your local DynamoDB instance

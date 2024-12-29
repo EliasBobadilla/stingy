@@ -1,4 +1,19 @@
 {
+  "SignUp": {
+    "title": "Sign Up",
+    "registerButton": "Register",
+    "divider": "OR",
+    "alreadyRegistered": "Already registered?",
+    "loginLink": "Sign in now",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone",
+    "usernamePlaceholder": "Enter username",
+    "emailPlaceholder": "email@example.com",
+    "passwordPlaceholder": "Enter password",
+    "phonePlaceholder": "+1 123 456 7890"
+  },
   "Index": {
     "title": "Home",
     "loggedIn": "Logged in as {username}",
