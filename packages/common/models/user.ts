@@ -3,7 +3,6 @@ import { User } from "../types/user";
 import { add, createDynamoDB, findOne, update } from "./db";
 
 const tableSchema = {
-  TableName: "stingy-users",
   AttributeDefinitions: [
     {
       AttributeName: "email",
@@ -20,6 +19,8 @@ const tableSchema = {
     ReadCapacityUnits: 1,
     WriteCapacityUnits: 1,
   },
+  TableName: "stingy-users",
+
 } as const satisfies CreateTableCommandInput;
 
 const client = await createDynamoDB(tableSchema);

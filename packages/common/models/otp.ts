@@ -3,7 +3,6 @@ import { Otp } from "../types/otp";
 import { add, createDynamoDB, deleteOne, findOne } from "./db";
 
 const tableSchema = {
-  TableName: "stingy-otp",
   AttributeDefinitions: [
     {
       AttributeName: "email",
@@ -20,6 +19,7 @@ const tableSchema = {
     ReadCapacityUnits: 1,
     WriteCapacityUnits: 1,
   },
+  TableName: "stingy-otp",
 } as const satisfies CreateTableCommandInput;
 
 const client = await createDynamoDB(tableSchema);
