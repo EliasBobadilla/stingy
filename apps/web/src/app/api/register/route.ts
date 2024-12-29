@@ -1,9 +1,9 @@
-import { addUser, findUserByEmail } from "@repo/common/models/user";
-import bcrypt from "bcrypt";
 import { addOtp } from "@repo/common/models/otp";
+import { addUser, findUserByEmail } from "@repo/common/models/user";
+import { User } from "@repo/common/types/user";
+import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import { ulid } from "ulid";
-import { User } from "@repo/common/types/user";
 
 export async function POST(req: Request) {
   try {
@@ -15,39 +15,37 @@ export async function POST(req: Request) {
       if (existingUser.validated) {
         return NextResponse.json(
           { error: "User already exists" },
-          { status: 409 }
+          { status: 409 },
         );
       }
       // resent the code to the user who is already registered but not validated
       await sendOtp(existingUser);
       return NextResponse.json(
-        { id: existingUser.id, email: existingUser.email },
-        { status: 200 }
+        { email: existingUser.email, id: existingUser.id },
+        { status: 200 },
       );
     }
 
     // Hash the password
     const password = await bcrypt.hash(dto.password, 10);
-    const createdAt = Math.floor(new Date().getTime() / 1000);
 
     // Create a new user
     const user = {
+      email: dto.email,
       id: ulid(),
       name: dto.name,
-      email: dto.email,
       password,
       phone: dto.phone,
-      validated: false,
       role: "admin", // TODO: hardcoding the role for now
+      validated: false,
       workspaces: ["demo"], // TODO: hardcoding the workspace for now
-      createdAt: createdAt.toString(),
     };
 
     await Promise.all([addUser(user), sendOtp(user)]);
 
     return NextResponse.json(
-      { id: user.id, email: user.email },
-      { status: 201 }
+      { email: user.email, id: user.id },
+      { status: 201 },
     );
   } catch (error) {
     console.log("#### --> Registering ERROR", error); // TODO: Add logging
@@ -58,11 +56,11 @@ export async function POST(req: Request) {
 async function sendOtp(user: User) {
   const currentTime = Math.floor(new Date().getTime() / 1000);
   const opt = {
-    id: user.id,
-    email: user.email,
-    otp: (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString(),
     createdAt: currentTime.toString(),
-    expireAt: Math.floor(new Date().getTime() + 10 * 60 * 1000).toString(), // Expire in 10 minutes
+    email: user.email,
+    expireAt: Math.floor(new Date().getTime() + 10 * 60 * 1000).toString(),
+    id: user.id,
+    otp: (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString(), // Expire in 10 minutes
   };
 
   console.log("#### [[ OTP CODE ]] #### -->", opt); // TODO: Add logging

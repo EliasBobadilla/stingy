@@ -17,14 +17,14 @@ export async function POST(req: Request) {
     if (!existingUser) {
       return NextResponse.json(
         { error: "User does not exists" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (existingUser.validated) {
       return NextResponse.json(
         { error: "User already validated" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     if (!otp) {
       return NextResponse.json(
         { error: "One time password does not exists" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     ) {
       return NextResponse.json(
         { error: "Invalid One time password" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 

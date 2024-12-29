@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["ahooks", "remeda", "turbopack"]
+  "eslint.enable": true,
+  "cSpell.words": [
+    "ahooks",
+    "remeda",
+    "serviceworker",
+    "tseslint",
+    "turbopack"
+  ],
 }

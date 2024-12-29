@@ -1,13 +1,12 @@
 import {
-  DynamoDB,
   CreateTableCommand,
   CreateTableCommandInput,
-  ReturnValue,
   DeleteItemCommand,
+  DynamoDB,
   UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
-import { config } from "../utils/config";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { config } from "../utils/config";
 
 // URL for the local DynamoDB service
 const endpoint = "http://localhost:8000";
@@ -19,11 +18,11 @@ const endpoint = "http://localhost:8000";
  */
 export async function createDynamoDB(tableSchema: CreateTableCommandInput) {
   const db = new DynamoDB({
-    region: config.awsRegion,
     credentials: {
       accessKeyId: config.awsAccessKeyId,
       secretAccessKey: config.awsSecretAccessKey,
     },
+    region: config.awsRegion,
     ...(config.isDev && { endpoint }),
   });
 
@@ -33,7 +32,7 @@ export async function createDynamoDB(tableSchema: CreateTableCommandInput) {
 
 async function createTableIfNotExists(
   db: DynamoDB,
-  tableSchema: CreateTableCommandInput
+  tableSchema: CreateTableCommandInput,
 ) {
   const tables = await db.listTables({});
   if (tables.TableNames?.some((x) => x === tableSchema.TableName)) {
@@ -43,9 +42,10 @@ async function createTableIfNotExists(
 }
 
 export function add<T>(db: DynamoDB, tableName: string, model: T) {
+  const createdAt = Math.floor(new Date().getTime() / 1000);
   const params = {
+    Item: marshall({ ...model, createdAt: createdAt.toString() }),
     TableName: tableName,
-    Item: marshall(model),
   };
   return db.putItem(params);
 }
@@ -53,11 +53,11 @@ export function add<T>(db: DynamoDB, tableName: string, model: T) {
 export async function findOne<T>(
   db: DynamoDB,
   tableName: string,
-  key: Partial<T>
+  key: Partial<T>,
 ) {
   const params = {
-    TableName: tableName,
     Key: marshall(key),
+    TableName: tableName,
   };
 
   const response = await db.getItem(params);
@@ -73,19 +73,15 @@ export async function update<T>(
   db: DynamoDB,
   tableName: string,
   key: Partial<T>,
-  item: Partial<T>
+  item: Partial<T>,
 ) {
   const itemKeys = Object.keys(item);
 
   const response = await db.send(
     new UpdateItemCommand({
-      TableName: tableName,
-      Key: marshall(key),
-      ReturnValues: "ALL_NEW",
-      UpdateExpression: `SET ${itemKeys.map((k, index) => `#field${index} = :value${index}`).join(", ")}`,
       ExpressionAttributeNames: itemKeys.reduce(
         (accumulator, k, index) => ({ ...accumulator, [`#field${index}`]: k }),
-        {}
+        {},
       ),
       ExpressionAttributeValues: marshall(
         itemKeys.reduce(
@@ -93,10 +89,14 @@ export async function update<T>(
             ...accumulator,
             [`:value${index}`]: item[k as keyof T],
           }),
-          {}
-        )
+          {},
+        ),
       ),
-    })
+      Key: marshall(key),
+      ReturnValues: "ALL_NEW",
+      TableName: tableName,
+      UpdateExpression: `SET ${itemKeys.map((k, index) => `#field${index} = :value${index}`).join(", ")}`,
+    }),
   );
 
   if (response.Attributes) {
@@ -109,13 +109,13 @@ export async function update<T>(
 export async function deleteOne<T>(
   db: DynamoDB,
   tableName: string,
-  key: Partial<T>
+  key: Partial<T>,
 ) {
   const response = await db.send(
     new DeleteItemCommand({
-      TableName: tableName,
       Key: marshall(key),
-    })
+      TableName: tableName,
+    }),
   );
 
   if (response.Attributes) {

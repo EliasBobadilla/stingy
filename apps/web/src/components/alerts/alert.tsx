@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
 import {
-  InformationCircleIcon,
-  XMarkIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
+  InformationCircleIcon,
   XCircleIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
+import React, { useEffect } from "react";
 
 const iconClass = "stroke-current h-6 w-6 shrink-0";
 

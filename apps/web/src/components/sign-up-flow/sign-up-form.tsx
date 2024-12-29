@@ -1,16 +1,16 @@
 "use client";
-import React, { useState } from "react";
-import { useTranslations } from "next-intl";
 import {
-  UserIcon,
   EnvelopeIcon,
   KeyIcon,
   PhoneIcon,
+  UserIcon,
 } from "@heroicons/react/24/solid";
+import { useTranslations } from "next-intl";
+import React, { useState } from "react";
 
 export interface IFormData {
-  name: string;
   email: string;
+  name: string;
   password: string;
   phone: string;
 }
@@ -22,8 +22,8 @@ interface ISignUpFormProps {
 export const SignUpForm: React.FC<ISignUpFormProps> = ({ handleSubmit }) => {
   const t = useTranslations("SignUp");
   const [formData, setFormData] = useState<IFormData>({
-    name: "",
     email: "",
+    name: "",
     password: "",
     phone: "",
   });

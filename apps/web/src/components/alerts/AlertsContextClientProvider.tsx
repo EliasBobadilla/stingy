@@ -13,8 +13,8 @@ interface IAlertsContext {
 }
 
 const AlertsContext = createContext<IAlertsContext>({
-  alerts: [],
   addAlert: () => "",
+  alerts: [],
   dismissAlert: () => {},
 });
 
@@ -32,7 +32,7 @@ const AlertsProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AlertsContext.Provider value={{ alerts, addAlert, dismissAlert }}>
+    <AlertsContext.Provider value={{ addAlert, alerts, dismissAlert }}>
       <AlertsWrapper>
         {alerts.map((alert) => (
           <Alert

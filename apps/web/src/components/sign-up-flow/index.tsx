@@ -1,19 +1,19 @@
 "use client";
-import React, { useState } from "react";
 import { useTranslations } from "next-intl";
-import { IFormData, SignUpForm } from "./sign-up-form";
-import { OtpValidationForm } from "./opt-validation-form";
-import { useAlerts } from "../alerts/AlertsContextClientProvider";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useAlerts } from "../alerts/AlertsContextClientProvider";
+import { OtpValidationForm } from "./opt-validation-form";
+import { IFormData, SignUpForm } from "./sign-up-form";
 
 type RegisterUserResponse = { id: string; email: string };
 
 export async function registerUser(
-  user: IFormData
+  user: IFormData,
 ): Promise<RegisterUserResponse> {
   const response = await fetch("/api/register", {
-    method: "POST",
     body: JSON.stringify(user),
+    method: "POST",
   });
 
   const data = await response.json();
@@ -28,11 +28,11 @@ export async function registerUser(
 export async function validateOtp(
   params: RegisterUserResponse & {
     otp: string;
-  }
+  },
 ): Promise<boolean> {
   const response = await fetch("/api/otp", {
-    method: "POST",
     body: JSON.stringify(params),
+    method: "POST",
   });
 
   return response.status == 200;
@@ -50,8 +50,8 @@ export const SignUpFlow: React.FC = () => {
       setUser(registeredUser);
     } catch {
       addAlert({
-        severity: "alert-error",
         message: "Opps, something went wrong. Please try again. #1", // TODO: i18n
+        severity: "alert-error",
         timeout: 3,
       });
     }
@@ -64,23 +64,23 @@ export const SignUpFlow: React.FC = () => {
       }
 
       const validated = await validateOtp({
-        id: user.id,
         email: user.email,
+        id: user.id,
         otp,
       });
 
       if (validated) {
         addAlert({
-          severity: "alert-success",
           message: "Congrats! You are registered.", // TODO: i18n
+          severity: "alert-success",
           timeout: 3,
         });
         router.push("/login");
       }
     } catch {
       addAlert({
-        severity: "alert-error",
         message: "Opps, something went wrong. Please try again. #2", // TODO: i18n
+        severity: "alert-error",
         timeout: 3,
       });
     }

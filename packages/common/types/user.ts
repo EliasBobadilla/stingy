@@ -7,5 +7,5 @@ export interface User {
   password: string;
   validated: boolean;
   workspaces: string[];
-  createdAt: string;
+  createdAt?: string;
 }

@@ -1,6 +1,6 @@
+import { useTranslations } from "next-intl";
 import React, { useRef, useState } from "react";
 import { isNonNullish, isNumber } from "remeda";
-import { useTranslations } from "next-intl";
 import { useAlerts } from "../alerts/AlertsContextClientProvider";
 
 interface IProps {
@@ -63,10 +63,12 @@ export const OtpValidationForm = ({ handleSubmit }: IProps) => {
     e.target.select();
   };
 
+  const otpLengthRegex = new RegExp(`^[0-9]{4}}$`);
+
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const text = e.clipboardData.getData("text");
-    if (!new RegExp(`^[0-9]{${otp.length}}$`).test(text)) {
+    if (!otpLengthRegex.test(text)) {
       return;
     }
     const digits = text.split("");
@@ -81,8 +83,8 @@ export const OtpValidationForm = ({ handleSubmit }: IProps) => {
 
     if (!isValid) {
       addAlert({
-        severity: "alert-error",
         message: "Opps, something went wrong. Please try again. #3", // TODO: i18n
+        severity: "alert-error",
         timeout: 2,
       });
       return;
@@ -105,7 +107,7 @@ export const OtpValidationForm = ({ handleSubmit }: IProps) => {
             onFocus={handleFocus}
             onPaste={handlePaste}
             ref={(el) => {
-              inputRefs.current[index] = el;
+              inputRefs.current[Number(index)] = el;
             }}
             className="shadow-xs flex w-[64px] items-center justify-center rounded-lg border border-stroke bg-white p-2 text-center text-2xl font-medium text-gray-5 outline-none sm:text-4xl dark:border-dark-3 dark:bg-white/5"
           />

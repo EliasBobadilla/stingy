@@ -1,7 +1,6 @@
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { add, createDynamoDB, findOne, update } from "./db";
-import { CreateTableCommandInput, ReturnValue } from "@aws-sdk/client-dynamodb";
+import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
 import { User } from "../types/user";
+import { add, createDynamoDB, findOne, update } from "./db";
 
 const tableSchema = {
   TableName: "stingy-users",
@@ -38,13 +37,13 @@ export const findUserByEmail = async ({
 
 export const updateUserByEmail = async (
   email: string,
-  params: Partial<User>
+  params: Partial<User>,
 ): Promise<void> => {
   const tempo = await update<User>(
     client,
     tableSchema.TableName,
     { email },
-    params
+    params,
   );
   console.log("###### UPDATE USER RESPONSE -->", tempo);
 };

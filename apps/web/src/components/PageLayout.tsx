@@ -5,16 +5,16 @@ type Props = {
   children?: ReactNode;
   title: string;
 };
-
+// TODO: check styles
 export default function PageLayout({ children, title }: Props) {
   return (
     <>
       <div
         style={{
-          padding: 24,
+          boxSizing: "border-box",
           fontFamily: "system-ui, sans-serif",
           lineHeight: 1.5,
-          boxSizing: "border-box",
+          padding: 24,
         }}
       >
         <div style={{ maxWidth: 510 }}>

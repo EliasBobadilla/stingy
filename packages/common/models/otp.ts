@@ -1,7 +1,6 @@
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { add, createDynamoDB, deleteOne, findOne } from "./db";
 import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
 import { Otp } from "../types/otp";
+import { add, createDynamoDB, deleteOne, findOne } from "./db";
 
 const tableSchema = {
   TableName: "stingy-otp",

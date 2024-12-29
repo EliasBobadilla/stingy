@@ -1,7 +1,9 @@
-import { NextRequest } from "next/server";
 import { withAuth } from "next-auth/middleware";
 import createMiddleware from "next-intl/middleware";
+import { NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
+
+type AuthMiddleware = (req: NextRequest) => Response | Promise<Response>;
 
 const publicPages = ["/", "/login", "/otp", "/register"];
 
@@ -21,7 +23,7 @@ export default function middleware(req: NextRequest) {
     `^(/(${routing.locales.join("|")}))?(${publicPages
       .flatMap((p) => (p === "/" ? ["", "/"] : p))
       .join("|")})/?$`,
-    "i"
+    "i",
   );
 
   const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
@@ -29,7 +31,7 @@ export default function middleware(req: NextRequest) {
   if (isPublicPage) {
     return intlMiddleware(req);
   } else {
-    return (authMiddleware as any)(req);
+    return (authMiddleware as AuthMiddleware)(req);
   }
 }
 

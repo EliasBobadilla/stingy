@@ -1,5 +1,5 @@
-import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function LocaleSwitcher() {
   const t = useTranslations("LocaleSwitcher");
