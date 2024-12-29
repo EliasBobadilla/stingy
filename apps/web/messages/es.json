@@ -1,4 +1,19 @@
 {
+  "SignUp": {
+    "title": "Registrarse",
+    "registerButton": "Registrarse",
+    "divider": "O",
+    "alreadyRegistered": "Ya estas registrado?",
+    "loginLink": "Ingresa ahora",
+    "username": "Nombre de Usuario",
+    "email": "Email",
+    "password": "Contraseña",
+    "phone": "Número de teléfono",
+    "usernamePlaceholder": "Ingresa nombre de usuario",
+    "emailPlaceholder": "email@ejemplo.com",
+    "passwordPlaceholder": "Ingresa contraseña",
+    "phonePlaceholder": "+51 123 456 7890"
+  },
   "Index": {
     "title": "Inicio",
     "loggedIn": "Logueado como {username}",

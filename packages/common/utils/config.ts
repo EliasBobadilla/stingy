@@ -9,9 +9,9 @@ export type Config = {
   sessionSecret: string;
 };
 
-// avoid using .env.* files to reduce the project's initial setup boilerplate
 function getEnvironmentVariables(isDev: boolean): Config {
   if (isDev) {
+    // avoid using .env.* files to reduce the project's initial setup boilerplate
     return {
       isDev,
       awsAccessKeyId: "stingyFakeKeyId",
@@ -47,5 +47,4 @@ function getEnvironmentVariables(isDev: boolean): Config {
 }
 
 const isDev = !Boolean(process.env.VERCEL);
-
 export const config = getEnvironmentVariables(isDev);
