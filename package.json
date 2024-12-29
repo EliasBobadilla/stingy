@@ -6,7 +6,7 @@
     "db": "cd db && java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb",
     "dev": "concurrently \"npm run db\" \"turbo dev\"",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\""
   },
   "devDependencies": {
     "concurrently": "^9.1.1",
@@ -18,5 +18,15 @@
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "allowedDeprecatedVersions": {
+      "are-we-there-yet": "2",
+      "gauge": "3",
+      "glob": "7",
+      "inflight": "1",
+      "npmlog": "5",
+      "rimraf": "3"
+    }
   }
 }

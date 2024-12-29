@@ -5,10 +5,8 @@
       {
         "name": "next"
       }
-    ],
+    ]
   },
-  "include": [
-    "**/*.ts"
-  ],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }
