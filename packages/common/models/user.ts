@@ -20,7 +20,6 @@ const tableSchema = {
     WriteCapacityUnits: 1,
   },
   TableName: "stingy-users",
-
 } as const satisfies CreateTableCommandInput;
 
 const client = await createDynamoDB(tableSchema);
