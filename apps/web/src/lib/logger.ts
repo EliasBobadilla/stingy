@@ -5,7 +5,7 @@ const winston = createLogger({
   format: format.json(),
   transports: [
     new transports.File({
-      filename: "logs/errors.json",
+      filename: "tmp/errors.json",
       level: "error",
       handleExceptions: true,
       maxsize: 5242880, // 5MB
@@ -19,7 +19,7 @@ winston.add(
   new transports.Console({
     level: "debug",
     format: format.combine(format.colorize(), format.simple()),
-  }),
+  })
 );
 
 export const logger = {
