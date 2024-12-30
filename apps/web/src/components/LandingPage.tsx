@@ -5,6 +5,7 @@ import { Session } from "next-auth";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 type Props = {
   session: Session | null;
@@ -16,10 +17,12 @@ export function LandingPage({ session }: Props) {
 
   const router = useRouter();
 
-  if (session) {
-    router.replace("/secret");
-    return;
-  }
+  useEffect(() => {
+    if (session) {
+      router.replace("/secret");
+      return;
+    }
+  });
 
   return (
     <PageLayout title={t("title")}>

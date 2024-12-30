@@ -83,7 +83,7 @@ export const OtpValidationForm = ({ handleSubmit }: IProps) => {
 
     if (!isValid) {
       addAlert({
-        message: "Opps, something went wrong. Please try again. #3", // TODO: i18n
+        message: t("registerError"),
         severity: "alert-error",
         timeout: 2,
       });
