@@ -4,12 +4,15 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useAlerts } from "../alerts/AlertsContextClientProvider";
 import { OtpValidationForm } from "./opt-validation-form";
-import { IFormData, SignUpForm } from "./sign-up-form";
+import { SignUpForm } from "./sign-up-form";
+import { UserDto } from "@/lib/dto/user";
+import { OtpDto, otpDtoSchema } from "@/lib/dto/otp";
+import { isValidDto } from "@/lib/utils/validate";
 
 type RegisterUserResponse = { id: string; email: string };
 
 export async function registerUser(
-  user: IFormData,
+  user: UserDto
 ): Promise<RegisterUserResponse> {
   const response = await fetch("/api/register", {
     body: JSON.stringify(user),
@@ -25,11 +28,7 @@ export async function registerUser(
   throw new Error(data);
 }
 
-export async function validateOtp(
-  params: RegisterUserResponse & {
-    otp: string;
-  },
-): Promise<boolean> {
+export async function validateOtp(params: OtpDto): Promise<boolean> {
   const response = await fetch("/api/otp", {
     body: JSON.stringify(params),
     method: "POST",
@@ -44,13 +43,13 @@ export const SignUpFlow: React.FC = () => {
   const router = useRouter();
   const { addAlert } = useAlerts();
 
-  const handleRegisterSubmit = async (formData: IFormData) => {
+  const handleRegisterSubmit = async (formData: UserDto) => {
     try {
       const registeredUser = await registerUser(formData);
       setUser(registeredUser);
     } catch {
       addAlert({
-        message: "Opps, something went wrong. Please try again. #1", // TODO: i18n
+        message: t("registerError"),
         severity: "alert-error",
         timeout: 3,
       });
@@ -59,27 +58,27 @@ export const SignUpFlow: React.FC = () => {
 
   const handleOptSubmit = async (otp: string) => {
     try {
-      if (!user) {
-        return;
-      }
-
-      const validated = await validateOtp({
-        email: user.email,
-        id: user.id,
+      const otpCode = {
+        email: user?.email,
+        id: user?.id,
         otp,
-      });
+      };
 
-      if (validated) {
-        addAlert({
-          message: "Congrats! You are registered.", // TODO: i18n
-          severity: "alert-success",
-          timeout: 3,
-        });
-        router.push("/login");
+      if (isValidDto(otpDtoSchema, otpCode)) {
+        const validated = await validateOtp(otpCode);
+
+        if (validated) {
+          addAlert({
+            message: t("registerSuccess"),
+            severity: "alert-success",
+            timeout: 3,
+          });
+          router.push("/login");
+        }
       }
     } catch {
       addAlert({
-        message: "Opps, something went wrong. Please try again. #2", // TODO: i18n
+        message: t("registerError"),
         severity: "alert-error",
         timeout: 3,
       });

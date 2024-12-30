@@ -11,6 +11,9 @@ const awsRegion = process.env.AWS_REGION ?? "us-east-1"; // default region
 const jwtSecret = process.env.AUTH_SECRET;
 assertSome(jwtSecret, "AUTH_SECRET");
 
+const whatsappVerifyToken = process.env.WEBHOOK_VERIFY_TOKEN;
+assertSome(whatsappVerifyToken, "WEBHOOK_VERIFY_TOKEN");
+
 const isDev = !process.env.VERCEL;
 
 export const config = {
@@ -19,6 +22,7 @@ export const config = {
   awsSecretAccessKey,
   awsRegion,
   jwtSecret,
+  whatsappVerifyToken,
 };
 
 export type Config = typeof config;

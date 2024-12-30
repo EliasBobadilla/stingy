@@ -39,13 +39,7 @@ export const updateUserByEmail = async (
   email: string,
   params: Partial<User>,
 ): Promise<void> => {
-  const tempo = await update<User>(
-    client,
-    tableSchema.TableName,
-    { email },
-    params,
-  );
-  console.log("###### UPDATE USER RESPONSE -->", tempo);
+  await update<User>(client, tableSchema.TableName, { email }, params);
 };
 
 export const findUsers = async () => {

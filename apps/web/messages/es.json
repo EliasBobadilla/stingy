@@ -12,7 +12,10 @@
     "usernamePlaceholder": "Ingresa nombre de usuario",
     "emailPlaceholder": "email@ejemplo.com",
     "passwordPlaceholder": "Ingresa contraseña",
-    "phonePlaceholder": "+51 123 456 7890"
+    "phonePlaceholder": "+51 123 456 7890",
+    "registerFormError": "vaya, verifique si hay errores en el formulario antes de enviarlo",
+    "registerError": "Vaya, algo salió mal. Inténtalo de nuevo.",
+    "registerSuccess": "Se ha registrado correctamente. Inicie sesión."
   },
   "Index": {
     "title": "Inicio",

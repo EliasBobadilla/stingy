@@ -1,4 +1,5 @@
 "use client";
+import { UserDto, userDtoSchema } from "@/lib/dto/user";
 import {
   EnvelopeIcon,
   KeyIcon,
@@ -7,26 +8,17 @@ import {
 } from "@heroicons/react/24/solid";
 import { useTranslations } from "next-intl";
 import React, { useState } from "react";
-
-export interface IFormData {
-  email: string;
-  name: string;
-  password: string;
-  phone: string;
-}
+import { useAlerts } from "../alerts/AlertsContextClientProvider";
+import { isValidDto } from "@/lib/utils/validate";
 
 interface ISignUpFormProps {
-  handleSubmit: (formData: IFormData) => void;
+  handleSubmit: (formData: UserDto) => void;
 }
 
 export const SignUpForm: React.FC<ISignUpFormProps> = ({ handleSubmit }) => {
   const t = useTranslations("SignUp");
-  const [formData, setFormData] = useState<IFormData>({
-    email: "",
-    name: "",
-    password: "",
-    phone: "",
-  });
+  const [formData, setFormData] = useState<UserDto>({} as UserDto);
+  const { addAlert } = useAlerts();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,8 +27,15 @@ export const SignUpForm: React.FC<ISignUpFormProps> = ({ handleSubmit }) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement ZOD validation
-    handleSubmit(formData);
+    if (isValidDto(userDtoSchema, formData)) {
+      handleSubmit(formData);
+      return;
+    }
+    addAlert({
+      message: t("registerFormError"),
+      severity: "alert-error",
+      timeout: 2,
+    });
   };
 
   return (
