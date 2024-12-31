@@ -1,4 +1,4 @@
-import { assertSome } from "../utils/validator";
+import { assertSome } from "../utils/validate";
 
 const awsAccessKeyId = process.env.AWS_ACCESS_KEY_ID;
 assertSome(awsAccessKeyId, "AWS_ACCESS_KEY_ID");
@@ -17,10 +17,10 @@ assertSome(whatsappVerifyToken, "WEBHOOK_VERIFY_TOKEN");
 const isDev = !process.env.VERCEL;
 
 export const config = {
-  isDev,
   awsAccessKeyId,
-  awsSecretAccessKey,
   awsRegion,
+  awsSecretAccessKey,
+  isDev,
   jwtSecret,
   whatsappVerifyToken,
 };

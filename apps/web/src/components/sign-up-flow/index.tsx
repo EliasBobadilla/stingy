@@ -5,14 +5,14 @@ import React, { useState } from "react";
 import { useAlerts } from "../alerts/AlertsContextClientProvider";
 import { OtpValidationForm } from "./opt-validation-form";
 import { SignUpForm } from "./sign-up-form";
-import { UserDto } from "@/lib/dto/user";
-import { OtpDto, otpDtoSchema } from "@/lib/dto/otp";
-import { isValidDto } from "@/lib/utils/validate";
+import { UserDto } from "@repo/common/dtos/user";
+import { OtpDto, otpDtoSchema } from "@repo/common/dtos/otp";
+import { validateType } from "@repo/common/utils/validate";
 
 type RegisterUserResponse = { id: string; email: string };
 
 export async function registerUser(
-  user: UserDto
+  user: UserDto,
 ): Promise<RegisterUserResponse> {
   const response = await fetch("/api/register", {
     body: JSON.stringify(user),
@@ -64,7 +64,7 @@ export const SignUpFlow: React.FC = () => {
         otp,
       };
 
-      if (isValidDto(otpDtoSchema, otpCode)) {
+      if (validateType(otpDtoSchema, otpCode)) {
         const validated = await validateOtp(otpCode);
 
         if (validated) {

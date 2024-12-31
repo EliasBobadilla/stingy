@@ -1,14 +1,14 @@
-import { otpDtoSchema } from "@/lib/dto/otp";
-import { logger } from "@/lib/logger";
-import { isValidDto } from "@/lib/utils/validate";
+import { otpDtoSchema } from "@repo/common/dtos/otp";
 import { deleteOtp, findOtpByEmail } from "@repo/common/models/otp";
 import { findUserByEmail, updateUserByEmail } from "@repo/common/models/user";
+import { logger } from "@repo/common/utils/logger";
 import { NextResponse } from "next/server";
+import { validateType } from "@repo/common/utils/validate";
 
 export async function POST(req: Request) {
   try {
     const dto = await req.json();
-    const isValid = isValidDto(otpDtoSchema, dto);
+    const isValid = validateType(otpDtoSchema, dto);
 
     if (!isValid) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
@@ -23,14 +23,14 @@ export async function POST(req: Request) {
     if (!existingUser) {
       return NextResponse.json(
         { error: "User does not exists" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (existingUser.validated) {
       return NextResponse.json(
         { error: "User already validated" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     if (!otp) {
       return NextResponse.json(
         { error: "One time password does not exists" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     ) {
       return NextResponse.json(
         { error: "Invalid One time password" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 

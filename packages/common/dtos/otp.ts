@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const otpDtoSchema = z.object({
-  id: z.string(),
   email: z.string().email().min(5),
+  id: z.string(),
   otp: z.number(),
 });
 

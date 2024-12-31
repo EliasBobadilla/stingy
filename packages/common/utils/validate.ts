@@ -1,3 +1,4 @@
+import { z, ZodTypeAny } from "zod";
 import { isNonNullish } from "remeda";
 
 export function assertSome<T>(
@@ -12,4 +13,11 @@ export function assertSome<T>(
       metadata ? "metadata: " + JSON.stringify(metadata) : ""
     } }`,
   );
+}
+
+export function validateType<T extends ZodTypeAny>(
+  schema: T,
+  object: unknown,
+): object is z.infer<T> {
+  return schema.safeParse(object).success;
 }

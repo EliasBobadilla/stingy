@@ -1,4 +1,4 @@
-import { logger } from "@/lib/logger";
+import { logger } from "@repo/common/utils/logger";
 import { config } from "@repo/common/utils/config";
 import { NextResponse } from "next/server";
 
@@ -19,7 +19,7 @@ export async function GET(req: Request) {
     } else {
       return NextResponse.json(
         { error: "Verify token does not match." },
-        { status: 403 }
+        { status: 403 },
       );
     }
   } catch (error) {

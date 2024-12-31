@@ -1,6 +1,6 @@
-import { userDtoSchema } from "@/lib/dto/user";
-import { logger } from "@/lib/logger";
-import { isValidDto } from "@/lib/utils/validate";
+import { userDtoSchema } from "@repo/common/dtos/user";
+import { logger } from "@repo/common/utils/logger";
+import { validateType } from "@repo/common/utils/validate";
 import { addOtp } from "@repo/common/models/otp";
 import { addUser, findUserByEmail } from "@repo/common/models/user";
 import { User } from "@repo/common/types/user";
@@ -11,7 +11,7 @@ import { ulid } from "ulid";
 export async function POST(req: Request) {
   try {
     const dto = await req.json();
-    const isValid = isValidDto(userDtoSchema, dto);
+    const isValid = validateType(userDtoSchema, dto);
 
     if (!isValid) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
@@ -24,14 +24,14 @@ export async function POST(req: Request) {
       if (existingUser.validated) {
         return NextResponse.json(
           { error: "User already exists" },
-          { status: 409 }
+          { status: 409 },
         );
       }
       // resent the code to the user who is already registered but not validated
       await sendOtp(existingUser);
       return NextResponse.json(
         { email: existingUser.email, id: existingUser.id },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { email: user.email, id: user.id },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     logger.error("Register", error);
