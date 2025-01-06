@@ -16,6 +16,37 @@ type Parameter = {
   type: string;
 };
 
+export async function sendWelcomeTemplate(
+  to: string,
+  language: SupportedLanguage,
+  name: string
+) {
+  const components: Component[] = [
+    {
+      parameters: [
+        {
+          text: name,
+          type: "text",
+        },
+      ],
+      type: "body",
+    },
+    {
+      index: 0,
+      parameters: [
+        {
+          text: name,
+          type: "text",
+        },
+      ],
+      sub_type: "url",
+      type: "button",
+    },
+  ];
+
+  await sendTemplate(to, `welcome_template_${language}`, language, components);
+}
+
 export async function sendOtpTemplate(
   to: string,
   language: SupportedLanguage,

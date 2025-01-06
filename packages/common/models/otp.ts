@@ -1,11 +1,12 @@
-import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
-import { Otp } from "../types/otp";
-import { add, createTableIfNotExists, deleteById, where } from "./db";
+import type { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
+import type { Otp } from "../types/otp";
+import type { DbClient } from "./db";
 import { createdAt, expireAt, random4 } from "../utils/math";
 import { ulid } from "ulid";
 import { User } from "../types/user";
+import { assertSome } from "../utils/validate";
 
-const tableSchema = {
+export const otpSchema = {
   AttributeDefinitions: [
     {
       AttributeName: "id",
@@ -25,31 +26,32 @@ const tableSchema = {
   TableName: "stingy-otp",
 } as const satisfies CreateTableCommandInput;
 
-export const otpClient = async () => {
-  await createTableIfNotExists(tableSchema);
-  return {
-    add: async (user: User): Promise<Otp> => {
-      const otp: Otp = {
-        code: random4(),
-        email: user.email,
-        expireAt: expireAt(10),
-        id: ulid(),
-      };
-      await add<Otp>(tableSchema.TableName, otp);
-      return otp;
-    },
-    deleteOtp: async (email: string) => {
-      const otps = await where<Otp>(tableSchema.TableName, { email });
-      await Promise.all(
-        otps.map((otp) => deleteById(tableSchema.TableName, { id: otp.id }))
-      );
-    },
-    getValidOtp: async ({ email, code }: Partial<Otp>) => {
-      const otps = await where<Otp>(tableSchema.TableName, { code, email });
-      const currentTime = createdAt();
+type Client = DbClient<Otp>;
 
-      const validOtp = otps.find((otp) => otp.expireAt < currentTime);
-      return validOtp ?? null;
-    },
+type Params = Partial<Otp>;
+
+export const addOtp = async (client: Client, user: User): Promise<Otp> => {
+  const otp: Otp = {
+    code: random4(),
+    email: user.email,
+    expireAt: expireAt(10),
+    id: ulid(),
+    userId: user.id,
   };
+  await client.add(otp);
+  return otp;
+};
+
+export const deleteOtpByEmail = async (client: Client, email: string) => {
+  const otps = await client.where({ email });
+  await Promise.all(otps.map((otp) => client.deleteById(otp.id)));
+};
+
+export const getValidOtp = async (client: Client, { email, code }: Params) => {
+  const otps = await client.where({ code, email });
+  const currentTime = createdAt();
+  const validOtp = otps.find((otp) => otp.expireAt > currentTime);
+
+  assertSome(validOtp, `getting valid OTP for ${email}, code: ${code}`);
+  return validOtp;
 };

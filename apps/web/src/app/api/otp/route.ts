@@ -1,90 +1,54 @@
-import { OtpDto, otpDtoSchema } from "@repo/common/dtos/otp";
-import { deleteOtpByEmail, findValidOtp } from "@repo/common/models/otp";
-import { findUserByEmail, updateUserByEmail } from "@repo/common/models/user";
+import { otpDtoSchema } from "@repo/common/dtos/otp";
+import {
+  deleteOtpByEmail,
+  getValidOtp,
+  otpSchema,
+} from "@repo/common/models/otp";
+import {
+  findUserById,
+  updateUserById,
+  userSchema,
+} from "@repo/common/models/user";
 import { logger } from "@repo/common/utils/logger";
-import { validateType } from "@repo/common/utils/validate";
-import { json, JsonBodyResponse } from "@/lib/server/response";
+import { assertSome, getValidatedDto } from "@repo/common/utils/validate";
+import { json } from "@/lib/server/response";
+import { getLanguage } from "@/lib/server/request";
+import { getDbClient } from "@repo/common/models/db";
+import { Otp } from "@repo/common/types/otp";
+import type { User } from "@repo/common/types/user";
+import { sendWelcomeTemplate } from "@/lib/whatsapp/send-template";
 
 export async function POST(req: Request) {
   try {
-    const dto = await req.json();
-    const validatedReq = await validateRequest(dto);
+    const [language, dto, userClient, otpClient] = await Promise.all([
+      getLanguage(),
+      getValidatedDto(req, otpDtoSchema),
+      getDbClient<User>(userSchema),
+      getDbClient<Otp>(otpSchema),
+    ]);
 
-    if (!validatedReq.success) {
-      return json(false, validatedReq);
-    }
+    // get otp and user
+    const [otp, user] = await Promise.all([
+      getValidOtp(otpClient, dto),
+      findUserById(userClient, dto.userId),
+    ]);
+
+    assertSome(otp);
+    assertSome(user);
 
     await Promise.all([
-      updateUserByEmail(dto.email, { validated: true }),
-      deleteOtpByEmail(dto.email),
+      updateUserById(userClient, otp.userId, { validated: true }),
+      deleteOtpByEmail(otpClient, dto.email),
+      sendWelcomeTemplate(user.phone, language, user.name),
     ]);
+
+    // destroy clients
+    userClient.dispose();
+    otpClient.dispose();
 
     return json(true);
   } catch (error) {
     logger.error(error);
     return json(false);
   }
-}
-
-async function validateRequest(dto: OtpDto): Promise<JsonBodyResponse> {
-  const isValid = validateType(otpDtoSchema, dto);
-
-  // check if dto is valid
-  if (!isValid) {
-    return {
-      code: 400,
-      error: "Invalid request",
-      success: false,
-    };
-  }
-
-  // find saved user and otp
-  const [user, otp] = await Promise.all([
-    findUserByEmail(dto),
-    findValidOtp(dto),
-  ]);
-
-  // check user exists
-  if (!user) {
-    return {
-      code: 404,
-      error: "User does not exists",
-      success: false,
-    };
-  }
-
-  // check if user is already validated
-  if (user?.validated) {
-    return {
-      code: 409,
-      error: "User already validated",
-      success: false,
-    };
-  }
-
-  // check otp exists
-  if (!otp) {
-    return {
-      code: 404,
-      error: "One time password does not exists",
-      success: false,
-    };
-  }
-
-  logger.debug("OTP", otp);
-  logger.debug("USER", user);
-
-  // check if otp is valid
-  if (user.id !== otp.userId || dto.userId !== otp.userId) {
-    return {
-      code: 400,
-      error: "Invalid One time password",
-      success: false,
-    };
-  }
-
-  return {
-    code: 200,
-    success: true,
-  };
 }

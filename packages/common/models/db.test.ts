@@ -1,14 +1,5 @@
-// import { mockClient } from "aws-sdk-client-mock";
-// import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
-import {
-  add,
-  createTableIfNotExists,
-  deleteById,
-  deleteTable,
-  updateById,
-  where,
-} from "./db";
+import { deleteTable, getDbClient } from "./db";
 
 jest.mock("../utils/config.ts", () => {
   return {
@@ -27,7 +18,7 @@ jest.mock("../utils/config.ts", () => {
 
 const TABLE_NAME = "user-test-table";
 
-const TEST_SCHEMA = {
+const TABLE_SCHEMA = {
   AttributeDefinitions: [
     {
       AttributeName: "id",
@@ -87,20 +78,16 @@ describe("CRUD operations", () => {
     expect(result).toBe(true);
   });
 
-  it("should create table if not exists", async () => {
-    const result = await createTableIfNotExists(TEST_SCHEMA);
-    expect(result).toBe(true);
-  });
-
   it("should add four", async () => {
-    const results = await Promise.all(
-      CHARACTERS.map((c) => add(TABLE_NAME, c))
-    );
+    const client = await getDbClient<Character>(TABLE_SCHEMA);
+    const results = await Promise.all(CHARACTERS.map((c) => client.add(c)));
+    client.dispose();
     expect(results).toStrictEqual([true, true, true, true]);
   });
 
   it("should query children", async () => {
-    const results = await where<Character>(TABLE_NAME, {
+    const client = await getDbClient<Character>(TABLE_SCHEMA);
+    const results = await client.where({
       kind: "children",
     });
 
@@ -112,7 +99,8 @@ describe("CRUD operations", () => {
   });
 
   it("should query Sportacus", async () => {
-    const results = await where<Character>(TABLE_NAME, {
+    const client = await getDbClient<Character>(TABLE_SCHEMA);
+    const results = await client.where({
       id: "2@stingy",
       kind: "hero",
     });
@@ -123,7 +111,8 @@ describe("CRUD operations", () => {
   });
 
   it("should query Stephanie", async () => {
-    const results = await where<Character>(TABLE_NAME, {
+    const client = await getDbClient<Character>(TABLE_SCHEMA);
+    const results = await client.where({
       fullName: "Stephanie",
     });
 
@@ -133,18 +122,13 @@ describe("CRUD operations", () => {
   });
 
   it("should update Ziggy", async () => {
-    const result = await updateById<Character>(
-      TABLE_NAME,
-      {
-        id: "4@stingy",
-      },
-      {
-        city: "LazyTown",
-        fullName: "Ziggy Candy",
-      }
-    );
+    const client = await getDbClient<Character>(TABLE_SCHEMA);
+    const result = await client.updateById("4@stingy", {
+      city: "LazyTown",
+      fullName: "Ziggy Candy",
+    });
 
-    const updated = await where<Character>(TABLE_NAME, {
+    const updated = await client.where({
       id: "4@stingy",
       kind: "children",
     });
@@ -156,11 +140,10 @@ describe("CRUD operations", () => {
   });
 
   it("should delete children", async () => {
-    const results = await deleteById<Character>(TABLE_NAME, {
-      id: "1@stingy",
-    });
+    const client = await getDbClient<Character>(TABLE_SCHEMA);
+    const results = await client.deleteById("1@stingy");
 
-    const updated = await where<Character>(TABLE_NAME, {
+    const updated = await client.where({
       kind: "children",
     });
 

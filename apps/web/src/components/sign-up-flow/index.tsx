@@ -59,8 +59,8 @@ export const SignUpFlow: React.FC = () => {
   const handleOptSubmit = async (otp: string) => {
     try {
       const otpCode = {
+        code: otp,
         email: user?.email,
-        otp,
         userId: user?.id,
       };
 
