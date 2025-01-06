@@ -1,9 +1,22 @@
 {
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
-    "plugins": [{ "name": "next" }],
-    "module": "esnext"
+    // "plugins": [{ "name": "next" }],
+    "module": "esnext",
+    // "paths": {
+    //   "@/dtos": ["./dtos/*"],
+    //   "@/models": ["./models/*"],
+    //   "@/utils": ["./utils/*"],
+    //   "@/types": ["./types/*"]
+    // },
+    "types": ["mocha", "jest"]
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["**/*.ts", "**/*.test.ts"],
+  "exclude": [
+    "node_modules"
+    // "**/*.spec.ts",
+    // "**/*.test.ts",
+    // "**/*.spec.tsx",
+    // "**/*.test.tsx"
+  ]
 }

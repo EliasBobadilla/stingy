@@ -1,6 +1,7 @@
 import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
 import { User } from "../types/user";
 import { add, createDynamoDB, findOne, update } from "./db";
+import { createdAt } from "../utils/math";
 
 const tableSchema = {
   AttributeDefinitions: [
@@ -8,11 +9,19 @@ const tableSchema = {
       AttributeName: "email",
       AttributeType: "S",
     },
+    {
+      AttributeName: "id",
+      AttributeType: "S",
+    },
   ],
   KeySchema: [
     {
-      AttributeName: "email",
+      AttributeName: "id",
       KeyType: "HASH",
+    },
+    {
+      AttributeName: "email",
+      KeyType: "RANGE",
     },
   ],
   ProvisionedThroughput: {
@@ -24,7 +33,18 @@ const tableSchema = {
 
 const client = createDynamoDB(tableSchema);
 
-export const addUser = async (user: User): Promise<void> => {
+export const addUser = async (
+  user: User,
+  skipIfExists?: boolean
+): Promise<void> => {
+  // FIXME: weak logic to skip writing in the database if the user already exists
+  // It must be validated at the database level
+  if (skipIfExists && user?.createdAt) {
+    if (user.createdAt < createdAt()) {
+      return;
+    }
+  }
+
   await add(client, tableSchema.TableName, user);
 };
 
@@ -37,7 +57,7 @@ export const findUserByEmail = async ({
 
 export const updateUserByEmail = async (
   email: string,
-  params: Partial<User>,
+  params: Partial<User>
 ): Promise<void> => {
   await update<User>(client, tableSchema.TableName, { email }, params);
 };

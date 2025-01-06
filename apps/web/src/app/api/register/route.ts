@@ -1,76 +1,93 @@
-import { userDtoSchema } from "@repo/common/dtos/user";
+import { UserDto, userDtoSchema } from "@repo/common/dtos/user";
 import { logger } from "@repo/common/utils/logger";
 import { validateType } from "@repo/common/utils/validate";
 import { addOtp } from "@repo/common/models/otp";
 import { addUser, findUserByEmail } from "@repo/common/models/user";
-import { User } from "@repo/common/types/user";
 import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
 import { ulid } from "ulid";
+import { json, JsonBodyResponse } from "@/lib/server/response";
+import { sendOtpTemplate } from "@/lib/whatsapp/send-template";
+import { getLanguage } from "@/lib/server/request";
+import { expireAt, random4 } from "@repo/common/utils/math";
+import { User } from "@repo/common/types/user";
 
 export async function POST(req: Request) {
   try {
+    const language = await getLanguage();
     const dto = await req.json();
-    const isValid = validateType(userDtoSchema, dto);
 
-    if (!isValid) {
-      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    const validatedReq = await validateRequest(dto);
+
+    if (!validatedReq.success) {
+      return json(false, validatedReq);
     }
 
-    const existingUser = await findUserByEmail(dto);
-
-    // user is already registered
-    if (existingUser) {
-      if (existingUser.validated) {
-        return NextResponse.json(
-          { error: "User already exists" },
-          { status: 409 },
-        );
-      }
-      // resent the code to the user who is already registered but not validated
-      await sendOtp(existingUser);
-      return NextResponse.json(
-        { email: existingUser.email, id: existingUser.id },
-        { status: 200 },
-      );
-    }
-
-    // Hash the password
-    const password = await bcrypt.hash(dto.password, 10);
-
-    // Create a new user
-    const user = {
-      email: dto.email,
+    // build new user
+    const user = validatedReq.user ?? {
+      ...dto,
       id: ulid(),
-      name: dto.name,
-      password,
-      phone: dto.phone.toString(),
+      password: await bcrypt.hash(dto.password, 10),
       role: "admin", // TODO: hardcoding the role for now
-      validated: false,
       workspaces: ["demo"], // TODO: hardcoding the workspace for now
     };
 
-    await Promise.all([addUser(user), sendOtp(user)]);
+    // build new otp object
+    const otpCode = {
+      email: user.email,
+      expireAt: expireAt(10),
+      id: ulid(),
+      otp: random4(),
+      userId: user.id,
+    };
 
-    return NextResponse.json(
-      { email: user.email, id: user.id },
-      { status: 201 },
-    );
+    await Promise.all([
+      addUser(user, true),
+      addOtp(otpCode),
+      sendOtpTemplate(user.phone, language, otpCode.otp),
+    ]);
+
+    return json(true, { email: user.email, id: user.id }, 201);
   } catch (error) {
-    logger.error("Register", error);
-    return NextResponse.json({ error }, { status: 500 });
+    logger.error(error);
+    return json(false);
   }
 }
 
-async function sendOtp(user: User) {
-  const opt = {
-    email: user.email,
-    expireAt: Math.floor(new Date().getTime() + 10 * 60 * 1000).toString(),
-    id: user.id,
-    otp: Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000, // Expire in 10 minutes
-  };
+async function validateRequest(
+  dto: UserDto
+): Promise<JsonBodyResponse & { user?: User }> {
+  const isValid = validateType(userDtoSchema, dto);
 
-  logger.debug("Otp code", opt);
-  // TODO: send otp through WhatsApp
-  await addOtp(opt);
+  // check if dto is valid
+  if (!isValid) {
+    return {
+      code: 400,
+      error: "Invalid request",
+      success: false,
+    };
+  }
+
+  const user = await findUserByEmail(dto);
+
+  // check if user exists and allow resending the otp code to the user who is already registered but not validated
+  if (user) {
+    if (user.validated) {
+      return {
+        code: 400,
+        error: "User is already validated",
+        success: false,
+      };
+    } else {
+      return {
+        code: 200,
+        success: true,
+        user,
+      };
+    }
+  }
+
+  return {
+    code: 200,
+    success: true,
+  };
 }

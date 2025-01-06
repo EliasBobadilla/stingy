@@ -5,7 +5,7 @@ export interface User {
   phone: string;
   role: string;
   password: string;
-  validated: boolean;
+  validated?: boolean;
   workspaces: string[];
-  createdAt?: string;
+  createdAt?: number;
 }

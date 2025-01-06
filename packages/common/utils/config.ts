@@ -14,6 +14,12 @@ assertSome(jwtSecret, "AUTH_SECRET");
 const whatsappVerifyToken = process.env.WEBHOOK_VERIFY_TOKEN;
 assertSome(whatsappVerifyToken, "WEBHOOK_VERIFY_TOKEN");
 
+const whatsappToken = process.env.WHATSAPP_TOKEN;
+assertSome(whatsappToken, "WHATSAPP_TOKEN");
+
+const whatsappPhoneNumber = process.env.WHATSAPP_PHONE_NUMBER;
+assertSome(whatsappPhoneNumber, "WHATSAPP_PHONE_NUMBER");
+
 const isDev = !process.env.VERCEL;
 
 export const config = {
@@ -22,6 +28,8 @@ export const config = {
   awsSecretAccessKey,
   isDev,
   jwtSecret,
+  whatsappPhoneNumber,
+  whatsappToken,
   whatsappVerifyToken,
 };
 

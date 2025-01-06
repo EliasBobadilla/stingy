@@ -1,15 +1,13 @@
 /* eslint-disable no-console */
-import { config } from "./config";
 
-const logHeader = (log: string, message: string) =>
-  `###--> Logger: [${log}][${message}]`;
+const logHeader = (log: string, message?: string) =>
+  `###--> [${log}]: ${message}`;
 
 export const logger = {
-  debug: (message: string, metadata: Record<string, unknown>) => {
-    if (config.isDev) console.debug(logHeader("debug", message), metadata);
-  },
-  error: (message: string, error: unknown) =>
+  debug: (message: string, metadata: unknown) =>
+    console.log(logHeader("debug", message), metadata),
+  error: (error: unknown, message?: string) =>
     console.error(logHeader("error", message), error),
-  info: (message: string, metadata: Record<string, unknown>) =>
-    console.info(logHeader("info", message), metadata),
+  info: (metadata: Record<string, unknown>) =>
+    console.log(logHeader("info"), metadata),
 };

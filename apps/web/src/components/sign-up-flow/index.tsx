@@ -12,7 +12,7 @@ import { validateType } from "@repo/common/utils/validate";
 type RegisterUserResponse = { id: string; email: string };
 
 export async function registerUser(
-  user: UserDto,
+  user: UserDto
 ): Promise<RegisterUserResponse> {
   const response = await fetch("/api/register", {
     body: JSON.stringify(user),
@@ -60,8 +60,8 @@ export const SignUpFlow: React.FC = () => {
     try {
       const otpCode = {
         email: user?.email,
-        id: user?.id,
         otp,
+        userId: user?.id,
       };
 
       if (validateType(otpDtoSchema, otpCode)) {
