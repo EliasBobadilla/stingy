@@ -1,76 +1,44 @@
-import { userDtoSchema } from "@/lib/dto/user";
-import { logger } from "@/lib/logger";
-import { isValidDto } from "@/lib/utils/validate";
-import { addOtp } from "@repo/common/models/otp";
-import { addUser, findUserByEmail } from "@repo/common/models/user";
-import { User } from "@repo/common/types/user";
-import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
-import { ulid } from "ulid";
+import { userDtoSchema } from "@repo/common/dtos/user";
+import { logger } from "@repo/common/utils/logger";
+import { getValidatedDto } from "@repo/common/utils/validate";
+import { addOtp, otpSchema } from "@repo/common/models/otp";
+import { addUser, userSchema } from "@repo/common/models/user";
+import { json } from "@/lib/server/response";
+import { sendOtpTemplate } from "@/lib/whatsapp/send-template";
+import { getLanguage } from "@/lib/server/request";
+import type { User } from "@repo/common/types/user";
+import { getDbClient } from "@repo/common/models/db";
+import { Otp } from "@repo/common/types/otp";
 
 export async function POST(req: Request) {
   try {
-    const dto = await req.json();
-    const isValid = isValidDto(userDtoSchema, dto);
+    const [language, dto, userClient, otpClient] = await Promise.all([
+      getLanguage(),
+      getValidatedDto(req, userDtoSchema),
+      getDbClient<User>(userSchema),
+      getDbClient<Otp>(otpSchema),
+    ]);
 
-    if (!isValid) {
-      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    //create user
+    const user = await addUser(userClient, dto, true);
+
+    if (user.validated) {
+      throw new Error("User is already validated");
     }
 
-    const existingUser = await findUserByEmail(dto);
+    // create otp
+    const otp = await addOtp(otpClient, user);
 
-    // user is already registered
-    if (existingUser) {
-      if (existingUser.validated) {
-        return NextResponse.json(
-          { error: "User already exists" },
-          { status: 409 }
-        );
-      }
-      // resent the code to the user who is already registered but not validated
-      await sendOtp(existingUser);
-      return NextResponse.json(
-        { email: existingUser.email, id: existingUser.id },
-        { status: 200 }
-      );
-    }
+    // send otp
+    await sendOtpTemplate(user.phone, language, otp.code);
 
-    // Hash the password
-    const password = await bcrypt.hash(dto.password, 10);
+    // destroy clients
+    userClient.dispose();
+    otpClient.dispose();
 
-    // Create a new user
-    const user = {
-      email: dto.email,
-      id: ulid(),
-      name: dto.name,
-      password,
-      phone: dto.phone.toString(),
-      role: "admin", // TODO: hardcoding the role for now
-      validated: false,
-      workspaces: ["demo"], // TODO: hardcoding the workspace for now
-    };
-
-    await Promise.all([addUser(user), sendOtp(user)]);
-
-    return NextResponse.json(
-      { email: user.email, id: user.id },
-      { status: 201 }
-    );
+    return json(true, { email: user.email, id: user.id }, 201);
   } catch (error) {
-    logger.error("Register", error);
-    return NextResponse.json({ error }, { status: 500 });
+    logger.error(error);
+    return json(false);
   }
-}
-
-async function sendOtp(user: User) {
-  const opt = {
-    email: user.email,
-    expireAt: Math.floor(new Date().getTime() + 10 * 60 * 1000).toString(),
-    id: user.id,
-    otp: Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000, // Expire in 10 minutes
-  };
-
-  logger.debug("Otp code", opt);
-  // TODO: send otp through WhatsApp
-  await addOtp(opt);
 }

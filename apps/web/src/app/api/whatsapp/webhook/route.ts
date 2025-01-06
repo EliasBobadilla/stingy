@@ -1,6 +1,6 @@
-import { logger } from "@/lib/logger";
+import { logger } from "@repo/common/utils/logger";
 import { config } from "@repo/common/utils/config";
-import { NextResponse } from "next/server";
+import { json } from "@/lib/server/response";
 
 export async function GET(req: Request) {
   try {
@@ -17,14 +17,11 @@ export async function GET(req: Request) {
         status: 200,
       });
     } else {
-      return NextResponse.json(
-        { error: "Verify token does not match." },
-        { status: 403 }
-      );
+      json(false, { error: "Verify token does not match." }, 403);
     }
   } catch (error) {
-    logger.error("Register", error);
-    return NextResponse.json({ error }, { status: 500 });
+    logger.error(error);
+    return json(false);
   }
 }
 
@@ -34,11 +31,11 @@ export async function POST(req: Request) {
     const messages =
       body.entry?.[0]?.changes[0]?.value?.messages ?? body.value?.messages;
 
-    logger.info("WhatsApp messages =>", messages);
-    return NextResponse.json({ message: "success" }, { status: 200 });
+    logger.info(messages);
+    return json(true);
   } catch (error) {
-    logger.error("Register", error);
-    return NextResponse.json({ error }, { status: 500 });
+    logger.error(error);
+    return json(false);
   }
 }
 

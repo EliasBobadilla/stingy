@@ -1,7 +1,5 @@
 import { useTranslations } from "next-intl";
 import React, { useRef, useState } from "react";
-import { isNonNullish, isNumber } from "remeda";
-import { useAlerts } from "../alerts/AlertsContextClientProvider";
 
 interface IProps {
   handleSubmit: (code: string) => void;
@@ -11,7 +9,6 @@ export const OtpValidationForm = ({ handleSubmit }: IProps) => {
   const t = useTranslations("SignUp");
   const [otp, setOtp] = useState(Array(4).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const { addAlert } = useAlerts();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
@@ -34,7 +31,7 @@ export const OtpValidationForm = ({ handleSubmit }: IProps) => {
         });
 
         const previousRef = inputRefs.current[index - 1];
-        if (isNonNullish(previousRef)) {
+        if (previousRef) {
           previousRef.focus();
         }
       }
@@ -52,7 +49,7 @@ export const OtpValidationForm = ({ handleSubmit }: IProps) => {
       ]);
       if (index < otp.length - 1) {
         const nextRef = inputRefs.current[index + 1];
-        if (isNonNullish(nextRef)) {
+        if (nextRef) {
           nextRef.focus();
         }
       }
@@ -77,19 +74,6 @@ export const OtpValidationForm = ({ handleSubmit }: IProps) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Check if all digits are numbers
-    const isValid = otp.every((digit: string) => isNumber(+digit));
-
-    if (!isValid) {
-      addAlert({
-        message: t("registerError"),
-        severity: "alert-error",
-        timeout: 2,
-      });
-      return;
-    }
-
     handleSubmit(otp.join(""));
   };
 

@@ -1,17 +1,22 @@
-import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
-import { User } from "../types/user";
-import { add, createDynamoDB, findOne, update } from "./db";
+import type { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
+import type { User } from "../types/user";
+import type { DbClient } from "./db";
+import bcrypt from "bcrypt";
+import { isNonNullish } from "remeda";
 
-const tableSchema = {
+import { ulid } from "ulid";
+import { assertSome } from "../utils/validate";
+
+export const userSchema = {
   AttributeDefinitions: [
     {
-      AttributeName: "email",
+      AttributeName: "id",
       AttributeType: "S",
     },
   ],
   KeySchema: [
     {
-      AttributeName: "email",
+      AttributeName: "id",
       KeyType: "HASH",
     },
   ],
@@ -22,26 +27,66 @@ const tableSchema = {
   TableName: "stingy-users",
 } as const satisfies CreateTableCommandInput;
 
-const client = createDynamoDB(tableSchema);
+type Client = DbClient<User>;
 
-export const addUser = async (user: User): Promise<void> => {
-  await add(client, tableSchema.TableName, user);
+type Params = Partial<User>;
+
+export const addUser = async (
+  client: Client,
+  user: {
+    email: string;
+    name: string;
+    password: string;
+    phone: string;
+    role?: string;
+  },
+  skiIfExists?: boolean
+): Promise<User> => {
+  if (skiIfExists) {
+    const [existingUser] = await client.where({ email: user.email });
+    if (isNonNullish(existingUser)) {
+      return existingUser;
+    }
+  }
+
+  const newUser = {
+    ...user,
+    id: ulid(),
+    password: await bcrypt.hash(user.password, 10),
+    role: user.role ?? "admin", // TODO: hardcoding the role for now
+    workspaces: ["demo"], // TODO: hardcoding the workspace for now
+  };
+
+  await client.add(newUser);
+  return newUser;
 };
 
-export const findUserByEmail = async ({
-  email,
-}: {
-  email: string;
-}): Promise<User | null> =>
-  findOne<User>(client, tableSchema.TableName, { email });
+export const findUserById = async (
+  client: Client,
+  id: string
+): Promise<User> => {
+  const [user] = await client.where({ id });
+  assertSome(user, `unavailable to find the user with the Id: ${id}`);
+  return user;
+};
 
-export const updateUserByEmail = async (
-  email: string,
-  params: Partial<User>,
+export const findUserByEmail = async (
+  client: Client,
+  email: string
+): Promise<User> => {
+  const [user] = await client.where({ email });
+  assertSome(user, `unavailable to find the user with the email: ${email}`);
+  return user;
+};
+
+export const updateUserById = async (
+  client: Client,
+  id: string,
+  params: Params
 ): Promise<void> => {
-  await update<User>(client, tableSchema.TableName, { email }, params);
+  await client.updateById(id, params);
 };
 
-export const findUsers = async () => {
-  return Promise.resolve([]);
+export const findUsers = async (client: Client, params: Params) => {
+  return await client.where(params);
 };

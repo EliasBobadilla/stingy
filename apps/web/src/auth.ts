@@ -1,4 +1,6 @@
-import { findUserByEmail } from "@repo/common/models/user";
+import { getDbClient } from "@repo/common/models/db";
+import { findUserByEmail, userSchema } from "@repo/common/models/user";
+import { User } from "@repo/common/types/user";
 import { config } from "@repo/common/utils/config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -14,7 +16,9 @@ const auth: AuthOptions = {
           return null;
         }
 
-        const user = await findUserByEmail(credentials);
+        // find user
+        const client = await getDbClient<User>(userSchema);
+        const user = await findUserByEmail(client, credentials?.email);
 
         // early return if no user
         if (!user) {
@@ -24,10 +28,11 @@ const auth: AuthOptions = {
         // Check if the password is correct
         const isPasswordCorrect = await bcrypt.compare(
           credentials.password,
-          user.password,
+          user.password
         );
 
         const { id, email } = user;
+        client.dispose();
 
         return isPasswordCorrect
           ? {

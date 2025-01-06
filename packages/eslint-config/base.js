@@ -1,6 +1,6 @@
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
-import pluginSecurity from 'eslint-plugin-security';
+import pluginSecurity from "eslint-plugin-security";
 import sortKeysFix from "eslint-plugin-sort-keys-fix";
 import turboPlugin from "eslint-plugin-turbo";
 import unusedImports from "eslint-plugin-unused-imports";
@@ -37,6 +37,7 @@ export const baseConfig = [
   },
   {
     rules: {
+      "no-console": "error",
       "sort-imports": [
         "error",
         {
@@ -51,7 +52,7 @@ export const baseConfig = [
       "sort-keys-fix": sortKeysFix,
     },
     rules: {
-      "sort-keys-fix/sort-keys-fix": "warn"
+      "sort-keys-fix/sort-keys-fix": "warn",
     },
   },
   js.configs.recommended,

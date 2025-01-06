@@ -7,12 +7,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
         hostname: "lh3.googleusercontent.com",
+        protocol: "https",
       },
     ],
   },
-  logging: false,
 };
 
 module.exports = withNextIntl(nextConfig);

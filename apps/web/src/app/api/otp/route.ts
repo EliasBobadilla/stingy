@@ -1,67 +1,54 @@
-import { otpDtoSchema } from "@/lib/dto/otp";
-import { logger } from "@/lib/logger";
-import { isValidDto } from "@/lib/utils/validate";
-import { deleteOtp, findOtpByEmail } from "@repo/common/models/otp";
-import { findUserByEmail, updateUserByEmail } from "@repo/common/models/user";
-import { NextResponse } from "next/server";
+import { otpDtoSchema } from "@repo/common/dtos/otp";
+import {
+  deleteOtpByEmail,
+  getValidOtp,
+  otpSchema,
+} from "@repo/common/models/otp";
+import {
+  findUserById,
+  updateUserById,
+  userSchema,
+} from "@repo/common/models/user";
+import { logger } from "@repo/common/utils/logger";
+import { assertSome, getValidatedDto } from "@repo/common/utils/validate";
+import { json } from "@/lib/server/response";
+import { getLanguage } from "@/lib/server/request";
+import { getDbClient } from "@repo/common/models/db";
+import { Otp } from "@repo/common/types/otp";
+import type { User } from "@repo/common/types/user";
+import { sendWelcomeTemplate } from "@/lib/whatsapp/send-template";
 
 export async function POST(req: Request) {
   try {
-    const dto = await req.json();
-    const isValid = isValidDto(otpDtoSchema, dto);
-
-    if (!isValid) {
-      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-    }
-
-    const [existingUser, otp] = await Promise.all([
-      findUserByEmail(dto),
-      findOtpByEmail(dto),
+    const [language, dto, userClient, otpClient] = await Promise.all([
+      getLanguage(),
+      getValidatedDto(req, otpDtoSchema),
+      getDbClient<User>(userSchema),
+      getDbClient<Otp>(otpSchema),
     ]);
 
-    // Check user
-    if (!existingUser) {
-      return NextResponse.json(
-        { error: "User does not exists" },
-        { status: 404 }
-      );
-    }
+    // get otp and user
+    const [otp, user] = await Promise.all([
+      getValidOtp(otpClient, dto),
+      findUserById(userClient, dto.userId),
+    ]);
 
-    if (existingUser.validated) {
-      return NextResponse.json(
-        { error: "User already validated" },
-        { status: 409 }
-      );
-    }
+    assertSome(otp);
+    assertSome(user);
 
-    // Check otp
-    if (!otp) {
-      return NextResponse.json(
-        { error: "One time password does not exists" },
-        { status: 404 }
-      );
-    }
-
-    if (
-      existingUser.email !== otp.email ||
-      existingUser.id !== otp.id ||
-      dto.otp !== otp.otp
-    ) {
-      return NextResponse.json(
-        { error: "Invalid One time password" },
-        { status: 400 }
-      );
-    }
-
-    // at this point the otp code is valid
     await Promise.all([
-      updateUserByEmail(dto.email, { validated: true }),
-      deleteOtp(dto.email),
+      updateUserById(userClient, otp.userId, { validated: true }),
+      deleteOtpByEmail(otpClient, dto.email),
+      sendWelcomeTemplate(user.phone, language, user.name),
     ]);
 
-    return NextResponse.json({}, { status: 200 });
+    // destroy clients
+    userClient.dispose();
+    otpClient.dispose();
+
+    return json(true);
   } catch (error) {
-    logger.error("Otp", error);
-    return NextResponse.json({ error }, { status: 500 });
+    logger.error(error);
+    return json(false);
   }
 }

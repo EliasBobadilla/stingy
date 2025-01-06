@@ -1,5 +1,5 @@
 "use client";
-import { UserDto, userDtoSchema } from "@/lib/dto/user";
+import { UserDto, userDtoSchema } from "@repo/common/dtos/user";
 import {
   EnvelopeIcon,
   KeyIcon,
@@ -9,7 +9,7 @@ import {
 import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 import { useAlerts } from "../alerts/AlertsContextClientProvider";
-import { isValidDto } from "@/lib/utils/validate";
+import { validateType } from "@repo/common/utils/validate";
 
 interface ISignUpFormProps {
   handleSubmit: (formData: UserDto) => void;
@@ -27,7 +27,7 @@ export const SignUpForm: React.FC<ISignUpFormProps> = ({ handleSubmit }) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isValidDto(userDtoSchema, formData)) {
+    if (validateType(userDtoSchema, formData)) {
       handleSubmit(formData);
       return;
     }

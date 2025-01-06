@@ -1,5 +1,7 @@
 export interface Otp {
-  id: string;
   email: string;
-  otp: number;
+  userId: string;
+  code: string;
+  expireAt: number;
+  id: string;
 }
