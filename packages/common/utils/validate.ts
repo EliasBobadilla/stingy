@@ -1,6 +1,7 @@
 import { z, ZodTypeAny } from "zod";
-import { logger } from "./logger";
+import { logger } from "@/utils/logger";
 import { isNonNullish } from "remeda";
+import { SUPPORTED_LANGUAGES, SupportedLanguage } from "@/types/i18n";
 
 export function assertSome<T>(
   arg?: T,
@@ -45,3 +46,12 @@ export async function getValidatedDto<T extends ZodTypeAny>(
   }
   return dto as z.infer<T>;
 }
+
+export const isSupportedLanguage = (
+  locale?: string
+): locale is SupportedLanguage => {
+  return (
+    isNonNullish(locale) &&
+    SUPPORTED_LANGUAGES.includes(locale as SupportedLanguage)
+  );
+};

@@ -1,5 +1,5 @@
 "use client";
-import { UserDto, userDtoSchema } from "@repo/common/dtos/user";
+import { UserDto, userDtoSchema } from "@repo/common/dtos/user-dto";
 import {
   EnvelopeIcon,
   KeyIcon,

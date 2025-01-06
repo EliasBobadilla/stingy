@@ -1,5 +1,6 @@
 import { getRequestConfig } from "next-intl/server";
-import { routing, SupportedLanguage } from "./routing";
+import { routing } from "./routing";
+import type { SupportedLanguage } from "@repo/common/types/i18n";
 
 export default getRequestConfig(async ({ requestLocale }) => {
   let locale: string | undefined = await requestLocale;

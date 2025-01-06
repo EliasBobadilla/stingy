@@ -1,6 +1,6 @@
-import { SupportedLanguage } from "@/i18n/routing";
-import { config } from "@repo/common/utils/config";
-import { logger } from "@repo/common/utils/logger";
+import type { SupportedLanguage } from "@/types/i18n";
+import { config } from "@/utils/config";
+import { logger } from "@/utils/logger";
 
 const SEND_TEMPLATE = "WhatsApp send template" as const;
 

@@ -1,13 +1,15 @@
-import { isSupportedLanguage, SupportedLanguage } from "@/i18n/routing";
+import { isSupportedLanguage } from "@repo/common/utils/validate";
 import { cookies } from "next/headers";
+import type { SupportedLanguage } from "@repo/common/types/i18n";
 
 export async function getLanguage(): Promise<SupportedLanguage> {
   const cookieStore = await cookies();
-  const locale = cookieStore.get("NEXT_LOCALE");
+  const nextLocale = cookieStore.get("NEXT_LOCALE");
 
-  if (!isSupportedLanguage(locale?.value)) {
-    throw new Error("Invalid language");
+  const locale = nextLocale?.value as SupportedLanguage;
+
+  if (isSupportedLanguage(locale)) {
+    return locale;
   }
-
-  return locale.value;
+  throw new Error("Invalid language");
 }

@@ -1,6 +1,10 @@
 import { logger } from "@repo/common/utils/logger";
 import { config } from "@repo/common/utils/config";
 import { json } from "@/lib/server/response";
+import { WhatsappMsgDto } from "@repo/common/dtos/whatsapp-dto";
+import { getUserModel } from "@repo/common/models/user-model";
+import { getWhatsappModel } from "@repo/common/models/whatsapp-model";
+import { hasAtLeast } from "remeda";
 
 export async function GET(req: Request) {
   try {
@@ -28,25 +32,27 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const messages =
+    const messages: WhatsappMsgDto[] =
       body.entry?.[0]?.changes[0]?.value?.messages ?? body.value?.messages;
 
-    logger.info(messages);
+    const [userClient, whatsappClient] = await Promise.all([
+      getUserModel(),
+      getWhatsappModel(),
+    ]);
+
+    if (hasAtLeast(messages, 1)) {
+      const user = await userClient.findOrThrow({ phone: body[0].from });
+      await Promise.all(
+        messages.map((m) => whatsappClient.addMessage(user, m.text.body))
+      );
+    }
+
+    userClient.dispose();
+    whatsappClient.dispose();
+
     return json(true);
   } catch (error) {
     logger.error(error);
     return json(false);
   }
 }
-
-/*
- [
-  {
-    from: '16315551181',
-    id: 'ABGGFlA5Fpa',
-    timestamp: '1504902988',
-    type: 'text',
-    text: { body: 'this is a text message' }
-  }
-]
-*/

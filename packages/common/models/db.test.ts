@@ -1,5 +1,5 @@
 import { CreateTableCommandInput } from "@aws-sdk/client-dynamodb";
-import { deleteTable, getDbClient } from "./db";
+import { deleteTable, getDbClient } from "@/models/db";
 
 jest.mock("../utils/config.ts", () => {
   return {
