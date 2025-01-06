@@ -1,4 +1,4 @@
-import type { User } from "@/types/user";
+import type { User } from "../types/user";
 import {
   add,
   createTableIfNotExists,
@@ -6,7 +6,7 @@ import {
   getDefaultSchema,
   updateById,
   where,
-} from "@/models/db";
+} from "../models/db";
 import bcrypt from "bcrypt";
 import { isNonNullish } from "remeda";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
@@ -31,7 +31,7 @@ export const getUserModel = async () => {
         phone: string;
         role?: string;
       },
-      skiIfExists?: boolean
+      skiIfExists?: boolean,
     ): Promise<User> => {
       if (skiIfExists) {
         const [existingUser] = await where<User>(client, TABLE_NAME, {
@@ -63,7 +63,7 @@ export const getUserModel = async () => {
       const [user] = await where<User>(client, TABLE_NAME, params);
       assertSome(
         user,
-        `unavailable to find the user: ${JSON.stringify(params)}`
+        `unavailable to find the user: ${JSON.stringify(params)}`,
       );
       return user;
     },

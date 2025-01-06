@@ -38,7 +38,7 @@ export const baseConfig = [
   {
     rules: {
       "@typescript-eslint/consistent-type-imports": "error",
-      "@typescript-eslint/naming-convention": "error",
+      // "@typescript-eslint/naming-convention": "error",
       "no-console": "error",
       "sort-imports": [
         "error",

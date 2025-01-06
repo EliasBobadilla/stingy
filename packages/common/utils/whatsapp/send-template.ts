@@ -1,12 +1,13 @@
-import type { SupportedLanguage } from "@/types/i18n";
-import { config } from "@/utils/config";
-import { logger } from "@/utils/logger";
+import type { SupportedLanguage } from "../../types/i18n";
+import { config } from "../../utils/config";
+import { logger } from "../../utils/logger";
 
 const SEND_TEMPLATE = "WhatsApp send template" as const;
 
 type Component = {
   index?: number;
   parameters: Parameter[];
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   sub_type?: string;
   type: string;
 };
@@ -19,7 +20,7 @@ type Parameter = {
 export async function sendWelcomeTemplate(
   to: string,
   language: SupportedLanguage,
-  name: string
+  name: string,
 ) {
   const components: Component[] = [
     {
@@ -50,7 +51,7 @@ export async function sendWelcomeTemplate(
 export async function sendOtpTemplate(
   to: string,
   language: SupportedLanguage,
-  otp: string
+  otp: string,
 ) {
   const components: Component[] = [
     {
@@ -79,7 +80,7 @@ export async function sendOtpTemplate(
     to,
     `verification_template_${language}`,
     language,
-    components
+    components,
   );
 }
 
@@ -87,7 +88,7 @@ async function sendTemplate(
   to: string,
   template: string,
   language: SupportedLanguage,
-  components: Component[]
+  components: Component[],
 ) {
   const body = {
     messaging_product: "whatsapp",
@@ -113,7 +114,7 @@ async function sendTemplate(
           "Content-Type": "application/json",
         },
         method: "POST",
-      }
+      },
     );
 
     const data = await response.json();

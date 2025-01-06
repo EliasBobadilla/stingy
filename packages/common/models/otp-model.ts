@@ -1,4 +1,4 @@
-import type { Otp } from "@/types/otp";
+import type { Otp } from "../types/otp";
 import {
   add,
   createTableIfNotExists,
@@ -6,11 +6,11 @@ import {
   deleteById,
   getDefaultSchema,
   where,
-} from "@/models/db";
-import { createdAt, expireAt, random4 } from "@/utils/math";
+} from "../models/db";
+import { createdAt, expireAt, random4 } from "../utils/math";
 import { ulid } from "ulid";
-import { User } from "@/types/user";
-import { assertSome } from "@/utils/validate";
+import type { User } from "../types/user";
+import { assertSome } from "../utils/validate";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 const TABLE_NAME = "stingy-otp" as const;
@@ -37,7 +37,7 @@ export const getOtpModel = async () => {
     deleteByEmail: async (email: string) => {
       const otps = await where<Otp>(client, TABLE_NAME, { email });
       await Promise.all(
-        otps.map((otp) => deleteById(client, TABLE_NAME, otp.id))
+        otps.map((otp) => deleteById(client, TABLE_NAME, otp.id)),
       );
     },
     dispose: () => {

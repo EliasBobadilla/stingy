@@ -1,7 +1,7 @@
 "use client";
 
 import PageLayout from "@/components/PageLayout";
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

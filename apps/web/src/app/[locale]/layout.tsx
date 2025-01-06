@@ -2,7 +2,7 @@ import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import "./globals.css";
 import { Providers } from "./providers";
 import type { SupportedLanguage } from "@repo/common/types/i18n";

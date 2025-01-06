@@ -2,7 +2,7 @@ import { getUserModel } from "@repo/common/models/user-model";
 import { config } from "@repo/common/utils/config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { AuthOptions } from "next-auth";
+import type { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const auth: AuthOptions = {

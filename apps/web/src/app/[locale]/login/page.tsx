@@ -4,7 +4,8 @@ import PageLayout from "@/components/PageLayout";
 import { signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import type { FormEvent } from "react";
+import { useState } from "react";
 
 export default function Login() {
   const locale = useLocale();

@@ -1,4 +1,4 @@
-import { assertSome } from "@/utils/validate";
+import { assertSome } from "../utils/validate";
 
 const awsAccessKeyId = process.env.AWS_ACCESS_KEY_ID;
 assertSome(awsAccessKeyId, "AWS_ACCESS_KEY_ID");

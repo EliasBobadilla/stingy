@@ -1,7 +1,7 @@
 import { logger } from "@repo/common/utils/logger";
 import { config } from "@repo/common/utils/config";
 import { json } from "@/lib/server/response";
-import { WhatsappMsgDto } from "@repo/common/dtos/whatsapp-dto";
+import type { WhatsappMsgDto } from "@repo/common/dtos/whatsapp-dto";
 import { getUserModel } from "@repo/common/models/user-model";
 import { getWhatsappModel } from "@repo/common/models/whatsapp-model";
 import { hasAtLeast } from "remeda";

@@ -1,7 +1,12 @@
-import { add, createTableIfNotExists, db, getDefaultSchema } from "@/models/db";
+import {
+  add,
+  createTableIfNotExists,
+  db,
+  getDefaultSchema,
+} from "../models/db";
 import { ulid } from "ulid";
-import { WhatsappMsg } from "@/types/whatsapp-message";
-import { User } from "@/types/user";
+import type { WhatsappMsg } from "../types/whatsapp-message";
+import type { User } from "../types/user";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 const TABLE_NAME = "stingy-whatsapp-messages" as const;

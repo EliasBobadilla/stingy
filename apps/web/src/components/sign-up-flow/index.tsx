@@ -5,8 +5,9 @@ import React, { useState } from "react";
 import { useAlerts } from "../alerts/AlertsContextClientProvider";
 import { OtpValidationForm } from "./opt-validation-form";
 import { SignUpForm } from "./sign-up-form";
-import { UserDto } from "@repo/common/dtos/user-dto";
-import { OtpDto, otpDtoSchema } from "@repo/common/dtos/otp-dto";
+import type { UserDto } from "@repo/common/dtos/user-dto";
+import type { OtpDto } from "@repo/common/dtos/otp-dto";
+import { otpDtoSchema } from "@repo/common/dtos/otp-dto";
 import { validateType } from "@repo/common/utils/validate";
 
 type RegisterUserResponse = { id: string; email: string };

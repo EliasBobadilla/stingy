@@ -2,9 +2,9 @@
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
     "module": "esnext",
-    "paths": {
-      "@/*": ["./*"]
-    },
+    // "paths": {
+    //   "@/*": ["./*"]
+    // },
     "types": ["mocha", "jest"]
   },
   "include": ["**/*.ts", "**/*.test.ts"],

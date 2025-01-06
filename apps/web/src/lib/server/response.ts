@@ -9,7 +9,7 @@ export type JsonBodyResponse = {
 export function json(
   success: boolean,
   response?: unknown,
-  statusCode?: number
+  statusCode?: number,
 ) {
   const status = statusCode ?? (success ? 200 : 500);
   const res = response ?? {

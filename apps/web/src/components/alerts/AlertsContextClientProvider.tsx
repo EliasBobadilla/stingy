@@ -1,6 +1,7 @@
 import { createContext, useContext, useRef, useState } from "react";
 import { ulid } from "ulid";
-import { Alert, AlertsWrapper, IAlert } from "./alert";
+import type { IAlert } from "./alert";
+import { Alert, AlertsWrapper } from "./alert";
 
 interface IInternalAlert extends IAlert {
   id: string;

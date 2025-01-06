@@ -1,6 +1,6 @@
 import { withAuth } from "next-auth/middleware";
 import createMiddleware from "next-intl/middleware";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 
 type AuthMiddleware = (req: NextRequest) => Response | Promise<Response>;
@@ -23,7 +23,7 @@ export default function middleware(req: NextRequest) {
     `^(/(${routing.locales.join("|")}))?(${publicPages
       .flatMap((p) => (p === "/" ? ["", "/"] : p))
       .join("|")})/?$`,
-    "i",
+    "i"
   );
 
   const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
