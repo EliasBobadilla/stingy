@@ -1,4 +1,4 @@
-import { routing } from "@/i18n/routing";
+import { routing, SupportedLanguage } from "@/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -8,7 +8,7 @@ import { Providers } from "./providers";
 
 type Props = {
   children: ReactNode;
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: SupportedLanguage }>;
 };
 
 export default async function LocaleLayout({ children, params }: Props) {
