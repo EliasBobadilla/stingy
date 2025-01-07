@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 const logHeader = (log: string, message?: string) =>
-  `###--> [${log}]: ${message}`;
+  `###[${log}]###--> ${message}`;
 
 export const logger = {
   debug: (message: string, metadata: unknown) =>
