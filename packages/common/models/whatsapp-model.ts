@@ -17,7 +17,11 @@ export const getWhatsappModel = async () => {
   const client = DynamoDBDocumentClient.from(db);
 
   return {
-    addMessage: async (user: User, message: string): Promise<WhatsappMsg> => {
+    addMessage: async (
+      user: User,
+      type: string,
+      message: string
+    ): Promise<WhatsappMsg> => {
       const msg = {
         email: user.email,
         from: user.phone,
@@ -25,6 +29,7 @@ export const getWhatsappModel = async () => {
         message,
         patron: true, // TODO: fixed for now
         processed: false, // TODO: fixed for now
+        type,
         userId: user.id,
       };
       await add(client, TABLE_NAME, msg);

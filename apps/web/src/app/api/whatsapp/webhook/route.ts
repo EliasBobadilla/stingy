@@ -32,6 +32,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+
     const messages: WhatsappMsgDto[] =
       body.entry?.[0]?.changes[0]?.value?.messages ?? body.value?.messages;
 
@@ -41,9 +42,11 @@ export async function POST(req: Request) {
     ]);
 
     if (hasAtLeast(messages, 1)) {
-      const user = await userClient.findOrThrow({ phone: body[0].from });
+      const user = await userClient.findOrThrow({ phone: messages[0].from });
       await Promise.all(
-        messages.map((m) => whatsappClient.addMessage(user, m.text.body))
+        messages.map((m) =>
+          whatsappClient.addMessage(user, m.type, m.text.body)
+        )
       );
     }
 
