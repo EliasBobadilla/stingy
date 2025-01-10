@@ -9,13 +9,16 @@ import { useState } from "react";
 
 export default function Login() {
   const locale = useLocale();
-  const t = useTranslations("Login");
-  const [error, setError] = useState<string>();
   const router = useRouter();
+
+  const t = useTranslations("Login");
+
+  const [error, setError] = useState("");
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (error) setError(undefined);
+
+    if (error) setError("");
 
     const formData = new FormData(event.currentTarget);
     signIn("credentials", {
