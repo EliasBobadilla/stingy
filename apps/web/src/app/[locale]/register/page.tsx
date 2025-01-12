@@ -1,8 +1,8 @@
 "use client";
 import { useAlerts } from "@/components/alerts/AlertsContextClientProvider";
-import { SignFlowLayout } from "@/components/sign-flow-layout";
-import { SignUpForm } from "@/components/sign-up-flow//sign-up-form";
-import { OtpValidationForm } from "@/components/sign-up-flow/opt-validation-form";
+import { LoginAndRegisterLayout } from "@/components/login-and-register-flow/login-and-register-layout";
+import { OtpValidationForm } from "@/components/login-and-register-flow/opt-validation-form";
+import { SignUpForm } from "@/components/login-and-register-flow/sign-up-form";
 import type { OtpDto } from "@repo/common/dtos/otp-dto";
 import { otpDtoSchema } from "@repo/common/dtos/otp-dto";
 import type { UserDto } from "@repo/common/dtos/user-dto";
@@ -40,7 +40,7 @@ export async function validateOtp(params: OtpDto): Promise<boolean> {
   return response.status == 200;
 }
 
-const SignUpFlow = () => {
+const SignUp = () => {
   const t = useTranslations("SignUp");
   const [user, setUser] = useState<RegisterUserResponse | null>(null);
   const router = useRouter();
@@ -89,7 +89,7 @@ const SignUpFlow = () => {
   };
 
   return (
-    <SignFlowLayout
+    <LoginAndRegisterLayout
       title={t("title")}
       image="https://picsum.photos/seed/login/800/600"
     >
@@ -107,8 +107,8 @@ const SignUpFlow = () => {
           </Link>
         </div>
       </>
-    </SignFlowLayout>
+    </LoginAndRegisterLayout>
   );
 };
 
-export default SignUpFlow;
+export default SignUp;

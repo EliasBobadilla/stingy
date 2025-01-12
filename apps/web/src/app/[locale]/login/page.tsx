@@ -1,8 +1,8 @@
 "use client";
 import { useAlerts } from "@/components/alerts/AlertsContextClientProvider";
-import { SignFlowLayout } from "@/components/sign-flow-layout";
-import { RecoveryPwdForm } from "@/components/sign-in-flow/recovery-pwd-form";
-import { SignInForm } from "@/components/sign-in-flow/sign-in-form";
+import { LoginAndRegisterLayout } from "@/components/login-and-register-flow/login-and-register-layout";
+import { RecoveryPwdForm } from "@/components/login-and-register-flow/recovery-pwd-form";
+import { SignInForm } from "@/components/login-and-register-flow/sign-in-form";
 import { signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
@@ -11,7 +11,7 @@ import { useState } from "react";
 
 const RESET_PWD_FLOW = "reset-pwd";
 
-const SignInFlow = () => {
+const SignIn = () => {
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -48,7 +48,7 @@ const SignInFlow = () => {
   const handleResetPwdSubmit = async (password: string) => {};
 
   return (
-    <SignFlowLayout
+    <LoginAndRegisterLayout
       title={t("title")}
       image="https://picsum.photos/seed/login/800/600"
     >
@@ -61,7 +61,11 @@ const SignInFlow = () => {
         <div className="divider">{t("divider")}</div>
         <div className="text-center">
           <p>{isLogin ? t("forgotPassword") : t("alreadyRegistered")}</p>
-          <a href="#" className="link link-primary" onClick={() => setIsLogin(!isLogin)}>
+          <a
+            href="#"
+            className="link link-primary"
+            onClick={() => setIsLogin(!isLogin)}
+          >
             {isLogin ? t("forgotPwdLink") : t("loginLink")}
           </a>
         </div>
@@ -72,9 +76,8 @@ const SignInFlow = () => {
           </Link>
         </div>
       </>
-    </SignFlowLayout>
+    </LoginAndRegisterLayout>
   );
 };
 
-
-export default SignInFlow;
+export default SignIn;

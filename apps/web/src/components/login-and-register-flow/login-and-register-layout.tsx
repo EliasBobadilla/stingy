@@ -7,7 +7,7 @@ type IProps = {
   children: ReactNode;
 };
 
-export const SignFlowLayout = ({ children, title, image }: IProps) => {
+export const LoginAndRegisterLayout = ({ children, title, image }: IProps) => {
   return (
     <div className="card lg:card-side bg-base-100 shadow-xl max-w-4xl w-full">
       <figure className="lg:w-1/2">

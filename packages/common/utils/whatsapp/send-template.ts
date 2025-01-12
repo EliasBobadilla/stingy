@@ -7,12 +7,13 @@ const SEND_TEMPLATE = "WhatsApp send template" as const;
 type Component = {
   index?: number;
   parameters: Parameter[];
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   sub_type?: string;
   type: string;
 };
 
 type Parameter = {
+  parameter_name?: string;
   text: string;
   type: string;
 };
@@ -26,22 +27,12 @@ export async function sendWelcomeTemplate(
     {
       parameters: [
         {
+          parameter_name: "name",
           text: name,
           type: "text",
         },
       ],
       type: "body",
-    },
-    {
-      index: 0,
-      parameters: [
-        {
-          text: name,
-          type: "text",
-        },
-      ],
-      sub_type: "url",
-      type: "button",
     },
   ];
 
