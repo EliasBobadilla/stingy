@@ -45,8 +45,8 @@ export async function POST(req: Request) {
       const user = await userClient.findOrThrow({ phone: messages[0].from });
       await Promise.all(
         messages.map((m) =>
-          whatsappClient.addMessage(user, m.type, m.text.body)
-        )
+          whatsappClient.addMessage(user, m.type, m.text.body),
+        ),
       );
     }
 

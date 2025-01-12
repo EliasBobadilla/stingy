@@ -1,10 +1,10 @@
+import { getLanguage } from "@/lib/server/request";
+import { json } from "@/lib/server/response";
 import { otpDtoSchema } from "@repo/common/dtos/otp-dto";
 import { getOtpModel } from "@repo/common/models/otp-model";
 import { getUserModel } from "@repo/common/models/user-model";
 import { logger } from "@repo/common/utils/logger";
 import { getValidatedDto } from "@repo/common/utils/validate";
-import { json } from "@/lib/server/response";
-import { getLanguage } from "@/lib/server/request";
 import { sendWelcomeTemplate } from "@repo/common/utils/whatsapp/send-template";
 
 export async function POST(req: Request) {

@@ -13,9 +13,25 @@
     "emailPlaceholder": "email@example.com",
     "passwordPlaceholder": "Enter password",
     "phonePlaceholder": "+1 123 456 7890",
-    "registerFormError": "Ops, check the form for errors before sending.",
+    "formDataError": "Ops, check the form for errors before sending.",
     "registerError": "Ops, something went wrong. Please try again.",
     "registerSuccess": "You have successfully registered. Please login."
+  },
+  "SignIn": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Login",
+    "divider": "Or",
+    "formDataError": "Ops, check the form for errors before sending.",
+    "loginError": "Ops, something went wrong. Please try again.",
+    "loginSuccess": "You have successfully registered. Please login.",
+    "forgotPassword": "Forgot your password?",
+    "forgotPwdLink": "Recover password",
+    "notHaveAccount": "Don't have an account?",
+    "notHaveAccountLink": "Sign up now",
+    "alreadyRegistered": "Already registered?",
+    "loginLink": "Sign in now"
   },
   "Index": {
     "title": "Home",
@@ -27,13 +43,6 @@
   },
   "LocaleLayout": {
     "title": "Stingy Home"
-  },
-  "Login": {
-    "title": "Login",
-    "username": "Username",
-    "password": "Password",
-    "submit": "Login",
-    "error": "{error, select, CredentialsSignin {Invalid username or password} other {Unknown error}}"
   },
   "LocaleSwitcher": {
     "switchLocale": "Switch to {locale, select, es {Spanish} en {English} other {Unknown}}"

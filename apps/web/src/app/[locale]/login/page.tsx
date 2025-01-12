@@ -1,74 +1,80 @@
 "use client";
-
-import PageLayout from "@/components/PageLayout";
+import { useAlerts } from "@/components/alerts/AlertsContextClientProvider";
+import { SignFlowLayout } from "@/components/sign-flow-layout";
+import { RecoveryPwdForm } from "@/components/sign-in-flow/recovery-pwd-form";
+import { SignInForm } from "@/components/sign-in-flow/sign-in-form";
 import { signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import type { FormEvent } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export default function Login() {
+const RESET_PWD_FLOW = "reset-pwd";
+
+const SignInFlow = () => {
   const locale = useLocale();
-  const t = useTranslations("Login");
-  const [error, setError] = useState<string>();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (error) setError(undefined);
+  const flow = searchParams.get("flow");
+  const t = useTranslations("SignIn");
+  const { addAlert } = useAlerts();
+  const [isLogin, setIsLogin] = useState<boolean>(flow !== RESET_PWD_FLOW);
 
-    const formData = new FormData(event.currentTarget);
-    signIn("credentials", {
-      email: formData.get("email"),
-      password: formData.get("password"),
-      redirect: false,
-    }).then((result) => {
-      if (result?.error) {
-        setError(result.error);
-      } else {
-        router.push("/" + locale);
-      }
-    });
-  }
+  const handleLoginSubmit = async (formData: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      await signIn("credentials", {
+        ...formData,
+        redirect: false,
+      });
+      addAlert({
+        message: t("loginSuccess"),
+        severity: "alert-success",
+        timeout: 3,
+      });
+      router.push("/" + locale);
+    } catch {
+      addAlert({
+        message: t("loginError"),
+        severity: "alert-error",
+        timeout: 3,
+      });
+    }
+  };
+
+  const handleResetPwdSubmit = async (password: string) => {};
 
   return (
-    <PageLayout title={t("title")}>
-      <form
-        action="/api/auth/callback/credentials"
-        method="post"
-        onSubmit={onSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 10,
-          width: 300,
-        }}
-      >
-        <label style={{ display: "flex" }}>
-          <span style={{ display: "inline-block", flexGrow: 1, minWidth: 100 }}>
-            {t("username")}
-          </span>
-          <input
-            className="input input-bordered w-full max-w-xs"
-            name="email"
-            type="text"
-          />
-        </label>
-        <label style={{ display: "flex" }}>
-          <span style={{ display: "inline-block", flexGrow: 1, minWidth: 100 }}>
-            {t("password")}
-          </span>
-          <input
-            className="input input-bordered w-full max-w-xs"
-            name="password"
-            type="password"
-          />
-        </label>
-        {error && <p>{t("error", { error })}</p>}
-        <button className="btn btn-primary" type="submit">
-          {t("submit")}
-        </button>
-      </form>
-    </PageLayout>
+    <SignFlowLayout
+      title={t("title")}
+      image="https://picsum.photos/seed/login/800/600"
+    >
+      <>
+        {isLogin ? (
+          <SignInForm handleSubmit={handleLoginSubmit} />
+        ) : (
+          <RecoveryPwdForm handleSubmit={handleResetPwdSubmit} />
+        )}
+        <div className="divider">{t("divider")}</div>
+        <div className="text-center">
+          <p>{isLogin ? t("forgotPassword") : t("alreadyRegistered")}</p>
+          <a href="#" className="link link-primary" onClick={() => setIsLogin(!isLogin)}>
+            {isLogin ? t("forgotPwdLink") : t("loginLink")}
+          </a>
+        </div>
+        <div className="text-center">
+          <p>{t("notHaveAccount")}</p>
+          <Link href="/register" className="link link-primary">
+            {t("notHaveAccountLink")}
+          </Link>
+        </div>
+      </>
+    </SignFlowLayout>
   );
-}
+};
+
+
+export default SignInFlow;
