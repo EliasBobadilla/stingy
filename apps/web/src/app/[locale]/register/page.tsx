@@ -14,7 +14,7 @@ import { useState } from "react";
 
 type RegisterUserResponse = { id: string; email: string };
 
-export async function registerUser(
+async function registerUser(
   user: UserDto,
 ): Promise<RegisterUserResponse> {
   const response = await fetch("/api/register", {
@@ -31,7 +31,7 @@ export async function registerUser(
   throw new Error(data);
 }
 
-export async function validateOtp(params: OtpDto): Promise<boolean> {
+async function validateOtp(params: OtpDto): Promise<boolean> {
   const response = await fetch("/api/otp", {
     body: JSON.stringify(params),
     method: "POST",
