@@ -45,7 +45,10 @@ const SignIn = () => {
     }
   };
 
-  const handleResetPwdSubmit = async (password: string) => {};
+  const handleResetPwdSubmit = async (password: string) => {
+    // eslint-disable-next-line no-console
+    console.log(password); // TODO: implement password reset
+  };
 
   return (
     <LoginAndRegisterLayout
