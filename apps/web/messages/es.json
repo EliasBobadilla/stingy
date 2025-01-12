@@ -13,9 +13,25 @@
     "emailPlaceholder": "email@ejemplo.com",
     "passwordPlaceholder": "Ingresa contraseña",
     "phonePlaceholder": "+51 123 456 7890",
-    "registerFormError": "vaya, verifique si hay errores en el formulario antes de enviarlo",
+    "formDataError": "vaya, verifique si hay errores en el formulario antes de enviarlo",
     "registerError": "Vaya, algo salió mal. Inténtalo de nuevo.",
     "registerSuccess": "Se ha registrado correctamente. Inicie sesión."
+  },
+  "SignIn": {
+    "title": "Login",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "submit": "Login",
+    "divider": "O",
+    "formDataError": "vaya, verifique si hay errores en el formulario antes de enviarlo",
+    "loginError": "Vaya, algo salió mal. Inténtalo de nuevo.",
+    "loginSuccess": "Se ha registrado correctamente. Inicie sesión.",
+    "forgotPassword": "Olvidaste tu contraseña?",
+    "forgotPwdLink": "Recuperar contraseña",
+    "notHaveAccount": "No tienes cuenta?",
+    "notHaveAccountLink": "Registrate ahora",
+    "alreadyRegistered": "Ya estas registrado?",
+    "loginLink": "Ingresa ahora"
   },
   "Index": {
     "title": "Inicio",
@@ -28,17 +44,11 @@
   "LocaleLayout": {
     "title": "Stingy Inicio"
   },
-  "Login": {
-    "title": "Login",
-    "username": "Usuario",
-    "password": "Contraseña",
-    "submit": "Login",
-    "error": "{error, select, CredentialsSignin {Invalid username or password} other {Unknown error}}"
-  },
+
   "LocaleSwitcher": {
     "switchLocale": "Cambiar a {locale, select, es {Español} en {Ingles} other {Unknown}}"
   },
-  "Secret": {
+  "Dashboard": {
     "title": "Pagina secreta",
     "description": "esta pagina es visible solo para usuarios logueados",
     "logout": "Cerrar sesion"

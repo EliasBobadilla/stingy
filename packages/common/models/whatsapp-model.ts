@@ -20,7 +20,7 @@ export const getWhatsappModel = async () => {
     addMessage: async (
       user: User,
       type: string,
-      message: string
+      message: string,
     ): Promise<WhatsappMsg> => {
       const msg = {
         email: user.email,

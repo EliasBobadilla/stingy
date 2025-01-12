@@ -26,7 +26,7 @@ const auth: AuthOptions = {
         // Check if the password is correct
         const isPasswordCorrect = await bcrypt.compare(
           credentials.password,
-          user.password
+          user.password,
         );
 
         const { id, email } = user;

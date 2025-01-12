@@ -1,16 +1,16 @@
 "use client";
-import type { UserDto } from "@repo/common/dtos/user-dto";
-import { userDtoSchema } from "@repo/common/dtos/user-dto";
 import {
   EnvelopeIcon,
   KeyIcon,
   PhoneIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
+import type { UserDto } from "@repo/common/dtos/user-dto";
+import { userDtoSchema } from "@repo/common/dtos/user-dto";
+import { validateType } from "@repo/common/utils/validate";
 import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 import { useAlerts } from "../alerts/AlertsContextClientProvider";
-import { validateType } from "@repo/common/utils/validate";
 
 interface ISignUpFormProps {
   handleSubmit: (formData: UserDto) => void;
@@ -33,7 +33,7 @@ export const SignUpForm: React.FC<ISignUpFormProps> = ({ handleSubmit }) => {
       return;
     }
     addAlert({
-      message: t("registerFormError"),
+      message: t("formDataError"),
       severity: "alert-error",
       timeout: 2,
     });

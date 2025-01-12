@@ -52,7 +52,7 @@ export function getDefaultSchema(tableName: string): CreateTableCommandInput {
 export async function add<T>(
   client: DynamoDBDocumentClient,
   tableName: string,
-  model: Entity<T>
+  model: Entity<T>,
 ) {
   assertSome(model.id);
   const params = {
@@ -70,7 +70,7 @@ export async function add<T>(
 export async function deleteById(
   client: DynamoDBDocumentClient,
   tableName: string,
-  id: string
+  id: string,
 ) {
   const params = {
     Key: { id },
@@ -84,7 +84,7 @@ export async function updateById<T>(
   client: DynamoDBDocumentClient,
   tableName: string,
   id: string,
-  item: Partial<T>
+  item: Partial<T>,
 ) {
   const itemKeys = Object.keys(item);
   const params = {
@@ -93,14 +93,14 @@ export async function updateById<T>(
         ...accumulator,
         [`#field${index}`]: k,
       }),
-      {}
+      {},
     ),
     ExpressionAttributeValues: itemKeys.reduce(
       (accumulator, k, index) => ({
         ...accumulator,
         [`:value${index}`]: item[k as keyof T],
       }),
-      {}
+      {},
     ),
     Key: { id },
     TableName: tableName,
@@ -116,7 +116,7 @@ export async function updateById<T>(
 export async function where<T>(
   client: DynamoDBDocumentClient,
   tableName: string,
-  params: Partial<T>
+  params: Partial<T>,
 ) {
   const keys = Object.keys(params);
   const command = new ExecuteStatementCommand({
@@ -131,7 +131,7 @@ export async function deleteTable(tableName: string) {
   const client = DynamoDBDocumentClient.from(db);
   try {
     const { $metadata } = await client.send(
-      new DeleteTableCommand({ TableName: tableName })
+      new DeleteTableCommand({ TableName: tableName }),
     );
     return isSuccessCallback($metadata);
   } catch (caught) {
@@ -148,7 +148,7 @@ export async function deleteTable(tableName: string) {
 }
 
 export async function createTableIfNotExists(
-  tableSchema: CreateTableCommandInput
+  tableSchema: CreateTableCommandInput,
 ) {
   try {
     const { $metadata } = await db.send(new CreateTableCommand(tableSchema));
@@ -161,7 +161,7 @@ export async function createTableIfNotExists(
     }
     logger.error(
       caught,
-      `Unable to create the table "${tableSchema.TableName}"`
+      `Unable to create the table "${tableSchema.TableName}"`,
     );
     return false;
   }
