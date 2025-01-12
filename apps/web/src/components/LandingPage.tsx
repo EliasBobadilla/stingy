@@ -19,7 +19,7 @@ export function LandingPage({ session }: Props) {
 
   useEffect(() => {
     if (session) {
-      router.replace("/secret");
+      router.replace("/dashboard");
       return;
     }
   });

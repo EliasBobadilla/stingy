@@ -4,8 +4,8 @@ import PageLayout from "@/components/PageLayout";
 import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
 
-export default function Secret() {
-  const t = useTranslations("Secret");
+const Dashboard = () => {
+  const t = useTranslations("Dashboard");
 
   function onLogoutClick() {
     signOut();
@@ -25,4 +25,6 @@ export default function Secret() {
       </div>
     </PageLayout>
   );
-}
+};
+
+export default Dashboard;

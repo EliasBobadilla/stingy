@@ -47,7 +47,7 @@
   "LocaleSwitcher": {
     "switchLocale": "Switch to {locale, select, es {Spanish} en {English} other {Unknown}}"
   },
-  "Secret": {
+  "Dashboard": {
     "title": "Secret page",
     "description": "This page is only visible for logged in users.",
     "logout": "Logout"
