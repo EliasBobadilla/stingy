@@ -5,7 +5,7 @@ import { RecoveryPwdForm } from "@/components/login-and-register-flow/recovery-p
 import { SignInForm } from "@/components/login-and-register-flow/sign-in-form";
 import { signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 

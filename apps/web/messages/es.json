@@ -1,4 +1,10 @@
 {
+  "Navbar": {
+    "home": "Inicio",
+    "aboutUs": "Sobre nosotros",
+    "faq": "Preguntas frecuentes",
+    "login": "Ingresar"
+  },
   "SignUp": {
     "title": "Registrarse",
     "registerButton": "Registrarse",
@@ -46,7 +52,9 @@
   },
 
   "LocaleSwitcher": {
-    "switchLocale": "Cambiar a {locale, select, es {Español} en {Ingles} other {Unknown}}"
+    "switchLocale": "Cambiar a {locale, select, es {Español} en {Ingles} other {Unknown}}",
+    "en": "Ingles",
+    "es": "Español"
   },
   "Dashboard": {
     "title": "Pagina secreta",

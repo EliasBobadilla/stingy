@@ -1,4 +1,10 @@
 {
+  "Navbar": {
+    "home": "Home",
+    "aboutUs": "About us",
+    "faq": "FAQ",
+    "login": "Login"
+  },
   "SignUp": {
     "title": "Sign Up",
     "registerButton": "Register",
@@ -45,7 +51,9 @@
     "title": "Stingy Home"
   },
   "LocaleSwitcher": {
-    "switchLocale": "Switch to {locale, select, es {Spanish} en {English} other {Unknown}}"
+    "switchLocale": "Switch to {locale, select, es {Spanish} en {English} other {Unknown}}",
+    "en": "English",
+    "es": "Spanish"
   },
   "Dashboard": {
     "title": "Secret page",

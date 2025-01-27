@@ -34,6 +34,7 @@ const AlertsProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AlertsContext.Provider value={{ addAlert, alerts, dismissAlert }}>
+      {children}
       <AlertsWrapper>
         {alerts.map((alert) => (
           <Alert
@@ -45,7 +46,6 @@ const AlertsProvider = ({ children }: { children: React.ReactNode }) => {
           />
         ))}
       </AlertsWrapper>
-      {children}
     </AlertsContext.Provider>
   );
 };

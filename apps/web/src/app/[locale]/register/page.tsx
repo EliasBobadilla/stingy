@@ -8,15 +8,13 @@ import { otpDtoSchema } from "@repo/common/dtos/otp-dto";
 import type { UserDto } from "@repo/common/dtos/user-dto";
 import { validateType } from "@repo/common/utils/validate";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type RegisterUserResponse = { id: string; email: string };
 
-async function registerUser(
-  user: UserDto,
-): Promise<RegisterUserResponse> {
+async function registerUser(user: UserDto): Promise<RegisterUserResponse> {
   const response = await fetch("/api/register", {
     body: JSON.stringify(user),
     method: "POST",

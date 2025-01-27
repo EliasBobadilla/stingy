@@ -29,7 +29,9 @@ export default async function LocaleLayout({ children, params }: Props) {
       </head>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <div className="px-20 md:px-5">{children}</div>
+          </Providers>
         </NextIntlClientProvider>
       </body>
     </html>
