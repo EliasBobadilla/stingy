@@ -8,6 +8,10 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  daisyui: {
+    themes: ["emerald", "dracula"],
+  },
+  plugins: [daisyui],
   theme: {
     extend: {
       colors: {
@@ -15,9 +19,5 @@ export default {
         foreground: "var(--foreground)",
       },
     },
-  },
-  plugins: [daisyui],
-  daisyui: {
-    themes: ["emerald", "dracula"],
   },
 } satisfies Config;

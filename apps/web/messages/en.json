@@ -29,6 +29,8 @@
     "password": "Password",
     "submit": "Login",
     "divider": "Or",
+    "usernamePlaceholder": "Enter username",
+    "passwordPlaceholder": "Enter password",
     "formDataError": "Ops, check the form for errors before sending.",
     "loginError": "Ops, something went wrong. Please try again.",
     "loginSuccess": "You have successfully registered. Please login.",

@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  KeyIcon,
+  UserIcon,
+} from "@heroicons/react/24/solid";
 import { loginDtoSchema } from "@repo/common/dtos/login-dto";
 import { validateType } from "@repo/common/utils/validate";
 import { useTranslations } from "next-intl";
@@ -45,36 +49,42 @@ export const SignInForm = ({ handleSubmit }: IProps) => {
       action="/api/auth/callback/credentials"
       method="post"
       onSubmit={onSubmit}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 10,
-        width: 300,
-      }}
     >
-      <label style={{ display: "flex" }}>
-        <span style={{ display: "inline-block", flexGrow: 1, minWidth: 100 }}>
-          {t("username")}
-        </span>
-        <input
-          className="input input-bordered w-full max-w-xs"
-          name="email"
-          type="text"
-        />
-      </label>
-      <label style={{ display: "flex" }}>
-        <span style={{ display: "inline-block", flexGrow: 1, minWidth: 100 }}>
-          {t("password")}
-        </span>
-        <input
-          className="input input-bordered w-full max-w-xs"
-          name="password"
-          type="password"
-        />
-      </label>
+       <div className="form-control">
+       <label className="label">
+          <span className="label-text">{t("username")}</span>
+        </label>
+        <label className="input input-bordered flex items-center gap-2">
+          <UserIcon className="w-4 h-4 opacity-70" />
+          <input
+            type="text"
+            id="email"
+            name="email"
+            required
+            className="grow"
+            placeholder={t("usernamePlaceholder")}
+          />
+        </label>
+        <label className="label">
+          <span className="label-text">{t("password")}</span>
+        </label>
+        <label className="input input-bordered flex items-center gap-2">
+          <KeyIcon className="w-4 h-4 opacity-70" />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            className="grow"
+            placeholder={t("passwordPlaceholder")}
+          />
+        </label>
+       </div>
+       <div className="form-control mt-6">
       <button className="btn btn-primary" type="submit">
         {t("submit")}
       </button>
+      </div>
     </form>
   );
 };

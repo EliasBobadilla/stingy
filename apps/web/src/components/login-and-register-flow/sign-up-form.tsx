@@ -9,7 +9,9 @@ import type { UserDto } from "@repo/common/dtos/user-dto";
 import { userDtoSchema } from "@repo/common/dtos/user-dto";
 import { validateType } from "@repo/common/utils/validate";
 import { useTranslations } from "next-intl";
+import type { ChangeEvent } from "react";
 import React, { useState } from "react";
+import PhoneInput from "react-phone-input-2";
 import { useAlerts } from "../alerts/AlertsContextClientProvider";
 
 interface ISignUpFormProps {
@@ -77,9 +79,18 @@ export const SignUpForm: React.FC<ISignUpFormProps> = ({ handleSubmit }) => {
         <label className="label">
           <span className="label-text">{t("phone")}</span>
         </label>
+       
         <label className="input input-bordered flex items-center gap-2">
           <PhoneIcon className="w-4 h-4 opacity-70" />
-          <input
+          <PhoneInput
+          country={"us"}
+          value={formData.phone}
+          onChange={(phone) =>
+            onChange({ target: { name: "phone", value: phone } } as ChangeEvent<HTMLInputElement>)
+          }
+        />
+        <br />
+          {/* <input
             type="phone"
             id="phone"
             name="phone"
@@ -88,7 +99,7 @@ export const SignUpForm: React.FC<ISignUpFormProps> = ({ handleSubmit }) => {
             required
             className="grow"
             placeholder={t("phonePlaceholder")}
-          />
+          /> */}
         </label>
       </div>
       <div className="form-control mt-4">

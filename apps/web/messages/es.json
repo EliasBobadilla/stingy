@@ -29,6 +29,8 @@
     "password": "Contraseña",
     "submit": "Login",
     "divider": "O",
+    "usernamePlaceholder": "Ingresa nombre de usuario",
+    "passwordPlaceholder": "Ingresa contraseña",
     "formDataError": "vaya, verifique si hay errores en el formulario antes de enviarlo",
     "loginError": "Vaya, algo salió mal. Inténtalo de nuevo.",
     "loginSuccess": "Se ha registrado correctamente. Inicie sesión.",
