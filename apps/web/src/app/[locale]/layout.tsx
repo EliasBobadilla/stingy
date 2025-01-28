@@ -30,7 +30,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
-            <div className="h-screen w-100 flex items-center justify-center">
+            <div className="h-screen w-100 flex items-start justify-center">
               {children}
             </div>
           </Providers>
