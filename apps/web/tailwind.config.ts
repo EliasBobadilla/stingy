@@ -9,7 +9,7 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   daisyui: {
-    themes: ["emerald", "dracula"],
+    themes: ["light", "dark"],
   },
   plugins: [daisyui],
   theme: {
