@@ -4,6 +4,8 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "noEmit": false,
+    "lib": ["DOM", "DOM.Iterable", "ES6"],
+    "jsx": "react-jsx",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

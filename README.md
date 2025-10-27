@@ -1,22 +1,116 @@
 # Stingy
 
-<img src="https://w7.pngwing.com/pngs/334/1018/png-transparent-lazytown-character-youtube-prince-stingy-youtube.png" alt="stingy" width="400"/>
+<!-- <img src="https://w7.pngwing.com/pngs/334/1018/png-transparent-lazytown-character-youtube-prince-stingy-youtube.png" alt="stingy" width="400"/> -->
 
-This project was inspired by [Kodito](https://www.kodito.pe/).
+![stingy](https://w7.pngwing.com/pngs/334/1018/png-transparent-lazytown-character-youtube-prince-stingy-youtube.png)
 
-The fundamental concept is to provide an application that anybody can use to quickly track their spending and income via the web app or WhatsApp. The WhatsApp app is expected to provide the majority of inputs, with the web app being used only to read and check the summary or balance.
+The fundamental concept is to provide an application that anybody can use to quickly track their spending and income via WhatsApp. The web app being used only to read and check the summary or balance.
 
-To achieve natural and human integration, we will use an AI API provider on the WhatsApp interface, allowing the end user to write in human language without following particular commands or flows. The AI must interpret a statement like: `papa rellena 10 soles` and register in their account that the user spent **PEN 10 on the street food category**.
+To achieve natural and human integration, it uses an AI API provider on the WhatsApp interface, allowing the end user to write in human language without following particular commands or flows. The AI must interpret a statement like: `papa rellena 10 soles` and register in their account that the user spent **PEN 10 on the street food category**.
 
-## Technical notes
+## Structure
 
-This project uses [Turbo](https://turbo.build/repo/docs) to handle the monorepo and contains to main application:
+```
+stingy/
+├── apps/
+│   ├── web-service/     # Fastify backend API
+│   └── web-client/      # Vite frontend app
+├── packages/
+│   ├── capybara/        # UI components with Linaria
+│   └── common/          # Shared utilities and functions
+└── turbo.json           # Turbo configuration
+```
 
-- `Web`: The web client and API
-- `db`: Your local instance of AWS Dynamo DB
-- `common` : Shared logic and methods across the apps
-- `eslint-config`: Eslint general config
-- `typescript-config` TypeScript general config
+## Tech Stack
+
+- **Build System**: Turborepo
+- **Package Manager**: Yarn (v4)
+- **Language**: TypeScript
+- **Backend**: Fastify
+- **Frontend**: Remix
+- **Styling**: Linaria (CSS-in-JS)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- Yarn 4.0+
+
+### Installation
+
+```bash
+# Install dependencies
+yarn install
+
+# Build all packages
+yarn build
+
+# Start development servers
+yarn dev
+```
+
+### Available Scripts
+
+- `yarn dev` - Start all apps in development mode
+- `yarn build` - Build all apps and packages
+- `yarn lint` - Lint all code
+- `yarn type-check` - Check TypeScript types
+- `yarn clean` - Clean all build artifacts
+
+## Apps
+
+### Web Service (`apps/web-service`)
+
+Fastify-based REST API server running on port 3001.
+
+```bash
+cd apps/web-service
+yarn dev
+```
+
+### Web Client (`apps/web-client`)
+
+Vite frontend application.
+
+```bash
+cd apps/web-client
+yarn dev
+```
+
+## Packages
+
+### Capybara (`packages/capybara`)
+
+UI component library with Linaria for styling.
+
+### Common (`packages/common`)
+
+Shared utilities and functions used across apps.
+
+## Development
+
+The monorepo uses Yarn workspaces for dependency management and Turborepo for build orchestration. Each package can be developed independently while sharing common dependencies.
+
+### Adding Dependencies
+
+```bash
+# Add to workspace root
+yarn add -W <package>
+
+# Add to specific workspace
+yarn workspace <workspace-name> add <package>
+```
+
+### Building
+
+```bash
+# Build all packages
+yarn build
+
+# Build specific package
+yarn workspace <workspace-name> build
+```
 
 ## Configure environment variables
 
@@ -48,29 +142,12 @@ Default output format: json
 
 - Check this [link](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html) if you need more information about DynamoDB local instances.
 
-## Run the project
-
-we are using [pnpm](https://pnpm.io/) as package manager. To start the project after cloning it and prepare the local DynamoDB instance, you need to run `pnpm install` to install the project dependencies from the root directory, then run:
-
-```
-pnpm dev
-```
-
-To add new dependencies to the project, you must install them from the root project targeting the project to which you wish to add the dependent.
-
-`pnpm install express --filter=web`
-
-You can get more information about [managing dependencies](https://turbo.build/repo/docs/crafting-your-repository/managing-dependencies)
-
 ## Useful links
 
-- [NextJs](https://nextjs.org/)
 - [Turbo](https://turbo.build/repo/docs)
-- [⁠⁠Tailwindcss](https://tailwindcss.com/)
-- [DaisyUI](https://daisyui.com/)
-- [E⁠xpress](https://expressjs.com/en/5x/api.html)
 - [Whatsapp](https://developers.facebook.com/docs/whatsapp/?locale=es_LA)
 - [Open AI API](https://openai.com/index/openai-api/)
 - [React](https://react.dev/learn)
 - [TypeScript](https://www.typescriptlang.org/)
 - [DynamoDB](https://aws.amazon.com/dynamodb/?p=pm&c=database&pd=ddb&z=4)
+- [Road map](https://eliasbobadilla.notion.site/295f19971a4580df972ad938539274fc?v=295f19971a45808b9a91000c0faed957)
