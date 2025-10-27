@@ -2,8 +2,15 @@
 
 # Dependencies
 node_modules
-.pnp
-.pnp.js
+.yarn
+
+apps/web-client/.cache
+apps/web-client/.turbo
+apps/web-client/.build
+
+apps/web-service/.cache
+apps/web-service/.turbo
+apps/web-service/.build
 
 # Local env files
 .env
@@ -18,11 +25,7 @@ coverage
 # Turbo
 .turbo
 
-# Vercel
-.vercel
-
 # Build Outputs
-.next/
 out/
 build
 dist

@@ -1,5 +1,5 @@
 {
-  "name": "common",
+  "name": "capybara",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,8 +17,19 @@
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
+  "dependencies": {
+    "@linaria/core": "^4.2.10",
+    "@linaria/react": "^4.3.8",
+    "react": "^18.2.0"
+  },
   "devDependencies": {
+    "@linaria/babel-preset": "^4.4.5",
+    "@linaria/vite": "^4.2.11",
+    "@types/react": "^18.2.37",
     "eslint": "^8.50.0",
     "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0"
   }
 }
