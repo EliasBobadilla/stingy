@@ -2848,7 +2848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"capybara@workspace:*, capybara@workspace:packages/capybara":
+"capybara@npm:^1.0.0, capybara@workspace:packages/capybara":
   version: 0.0.0-use.local
   resolution: "capybara@workspace:packages/capybara"
   dependencies:
@@ -2907,7 +2907,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"common@workspace:*, common@workspace:packages/common":
+"common@npm:^1.0.0, common@workspace:packages/common":
   version: 0.0.0-use.local
   resolution: "common@workspace:packages/common"
   dependencies:
@@ -6403,8 +6403,8 @@ __metadata:
     "@react-router/serve": "npm:^7.0.0"
     "@types/react": "npm:^18.2.37"
     "@types/react-dom": "npm:^18.2.15"
-    capybara: "workspace:*"
-    common: "workspace:*"
+    capybara: "npm:^1.0.0"
+    common: "npm:^1.0.0"
     eslint: "npm:^8.50.0"
     isbot: "npm:^3.7.0"
     react: "npm:^18.2.0"
@@ -6420,7 +6420,7 @@ __metadata:
   resolution: "web-service@workspace:apps/web-service"
   dependencies:
     "@types/node": "npm:^20.0.0"
-    common: "workspace:*"
+    common: "npm:^1.0.0"
     eslint: "npm:^8.50.0"
     fastify: "npm:^4.24.3"
     tsx: "npm:^4.0.0"
